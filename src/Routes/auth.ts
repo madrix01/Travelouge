@@ -1,6 +1,6 @@
 import * as express from 'express';
 const router = express.Router();
-import db from '../initFirebase';
+import {db}from '../initFirebase';
 import * as bycrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import {LoginUser, NewUser} from '../Models/user.model'
