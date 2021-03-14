@@ -19,4 +19,4 @@ console.log("Database connected");
 const db = admin.firestore();
 
 
-export {db};
+export default db;

@@ -7,7 +7,7 @@ dotenv.config();
 // Routes
 import authRoute from '../src/Routes/auth';
 import homeRoute from '../src/Routes/home';
-
+import testRoute from '../src/Test/test';
 const app : express.Application = express();
 
 app.use(cors());
@@ -16,6 +16,8 @@ app.use(express.json());
 // Routes
 app.use('/api/user', authRoute);
 app.use('/api/home', homeRoute);
+app.use('/test', testRoute);
+
 
 app.get('/', (req, res) => {
     res.send("Hello")
