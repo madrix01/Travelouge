@@ -1,5 +1,11 @@
-interface User{
+export interface User{
+    id : string;
     username : string;
+    followers : number;
+    followings : number;
+    placesVisited : number;
+    bio : string;
+    timeCreate : number;
 }
 
 export interface NewUser extends User{
@@ -7,8 +13,9 @@ export interface NewUser extends User{
     password : string
 }
 
-export interface LoginUser extends User{
-    password : string
+export interface LoginUser{
+    password : string,
+    username : string
 }
 
 export interface TokenUser extends User{

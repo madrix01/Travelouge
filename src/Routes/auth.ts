@@ -4,7 +4,7 @@ import db from '../initFirebase';
 import * as bycrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import {LoginUser, NewUser} from '../Models/user.model'
-
+import * as uuid from 'uuid';
 
 const userRef = db.collection('users');    
 
@@ -16,7 +16,6 @@ router.post('/register', async (req, res) => {
 
 
     const body : NewUser = req.body;
-    console.log(body);
 
     const usernameExsists = await userRef.where("username", "==", req.body.username).get();
     const emailExsists = await userRef.where("email", "==", req.body.email).get();
@@ -31,13 +30,18 @@ router.post('/register', async (req, res) => {
         var newUserConfirm : NewUser = {
             username : req.body.username,
             email : req.body.email,
-            password : hashPass
+            password : hashPass,
+            followers : 0,
+            followings : 0,
+            placesVisited : 0,
+            bio : req.body.bio || "",
+            timeCreate : Date.now(),
+            id : uuid.v4()
         };
 
-        await userRef.doc(req.body.username).set(newUserConfirm)
+        await userRef.doc(newUserConfirm.id).set(newUserConfirm)
         .then(() => {res.json(newUserConfirm)})
         .catch(err => {res.send(err)})
-
     }
 })
 
@@ -55,10 +59,9 @@ router.post('/login', async (req, res) => {
                 res.status(400).json({'error' : "wrong username or password"});
             }
 
-            const token = jwt.sign({
-                username : doc.data().username,
-                email : doc.data().email
-            }, process.env.TOKEN_SECRET, {expiresIn: '1d'});
+            const token = jwt.sign(
+                doc.data()
+            , process.env.TOKEN_SECRET, {expiresIn: '1d'});
             
             res.status(200).json({authToken : token});
         })
