@@ -5,10 +5,11 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 // Routes
-import authRoute from '../src/Routes/auth';
-import homeRoute from '../src/Routes/home';
-import testRoute from '../src/Test/test';
+import authRoute from './Routes/auth';
+import homeRoute from './Routes/home';
+import testRoute from './Test/test';
 import followRoute from './Routes/follow';
+import postRoute from './Routes/post';
 
 const app : express.Application = express();
 
@@ -18,7 +19,9 @@ app.use(express.json());
 // Routes
 app.use('/api/user', authRoute);
 app.use('/api/home', homeRoute);
-app.use('/api/follow', followRoute);
+app.use('/api', followRoute);
+app.use('/api/post', postRoute);
+
 
 // Test
 app.use('/test', testRoute);

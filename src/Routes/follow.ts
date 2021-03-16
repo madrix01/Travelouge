@@ -11,7 +11,7 @@ import { firestore } from 'firebase-admin';
 const userRef = db.collection('users');
 const followRef = db.collection('followRelations');
 
-router.get("/:followId", verify, async (req, res) => {
+router.get("/follow/:followId", verify, async (req, res) => {
     
     if(req.user.id === req.params.followId) {
         res.json({error : "cannot follow logged in user"});
@@ -38,6 +38,30 @@ router.get("/:followId", verify, async (req, res) => {
     })
 
     res.json(followRelation);
+})
+
+router.get("/unfollow/:relationId", verify, async (req, res) => {
+    if(req.user.id === req.params.followId){
+        res.json({error : "cannot follow logged in user"});
+    }
+
+    const relationRef = await followRef.doc(req.params.relationId);
+    const fr = await relationRef.get();
+    if(fr.exists){
+        console.log("Relation Doc", fr.data());
+    }
+
+    await followRef.doc(req.params.relationId).delete();
+
+    await userRef.doc(req.user.id).update({
+        followings : firestore.FieldValue.increment(-1)        
+    })
+
+    await userRef.doc(fr.data().following).update({
+        followers : firestore.FieldValue.increment(-1)
+    })
+
+    res.json({"deleted" : "yes"})
 })
 
 export default router;  

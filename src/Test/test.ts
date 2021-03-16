@@ -35,7 +35,7 @@ router.post('/upload', multer({storage : storage}).single('upl') ,async (req, re
         ContentDisposition: 'inline'
     }
     
-    const cdn_url = "d94fgasd2olqz.cloudfront.net"
+    const cdn_url = process.env.CDN_URL
 
     s3.upload(uploadParams, async (err, data) => {
         if(err) {
