@@ -63,6 +63,7 @@ router.post('/login', async (req, res) => {
                 doc.data()
             , process.env.TOKEN_SECRET, {expiresIn: '1d'});
             
+            res.cookie('authToken', token, {httpOnly : true});
             res.status(200).json({authToken : token});
         })
     }

@@ -1,6 +1,7 @@
 import * as express from "express"
 import * as cors from 'cors'
 import * as dotenv from 'dotenv';
+import * as cookieParser from 'cookie-parser';
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ const app : express.Application = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 // Routes
 app.use('/api/user', authRoute);
@@ -24,7 +26,7 @@ app.use('/api/post', postRoute);
 
 
 // Test
-app.use('/test', testRoute);
+app.use('/test', testRoute  );
 
 
 app.get('/', (req, res) => {
