@@ -3,7 +3,7 @@ const router = express.Router();
 import db from '../initFirebase';
 import * as bycrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
-import {LoginUser, NewUser} from '../Models/user.model'
+import {LoginUser, NewUser, TokenUser} from '../Models/user.model'
 import * as uuid from 'uuid';
 
 const userRef = db.collection('users');    
@@ -59,8 +59,10 @@ router.post('/login', async (req, res) => {
                 res.status(400).json({'error' : "wrong username or password"});
             }
 
+            let tokenData = doc.data();
+            tokenData.password = undefined;
             const token = jwt.sign(
-                doc.data()
+                tokenData
             , process.env.TOKEN_SECRET, {expiresIn: '1d'});
             
             res.cookie('authToken', token, {httpOnly : true});

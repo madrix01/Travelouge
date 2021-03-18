@@ -5,6 +5,7 @@ import Cookie from 'js-cookie';
 import Login from './Pages/Auth/login';
 import Home from './Pages/Home/home';
 import Cookies from 'js-cookie';
+import Profile from './Pages/Profile/profile';
 
 
 function Routers() {
@@ -13,6 +14,7 @@ function Routers() {
             <Switch>
                 <Route path='/login' exact component={Login} /> 
                 <ProtectedRoute path='/home' exact component={Home} />
+                <ProtectedRoute path='/u/:username' component={Profile} />
             </Switch>
         </Router>
     )

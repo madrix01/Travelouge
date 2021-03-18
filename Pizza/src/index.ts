@@ -11,6 +11,7 @@ import homeRoute from './Routes/home';
 import testRoute from './Test/test';
 import followRoute from './Routes/follow';
 import postRoute from './Routes/post';
+import profileRoute from './Routes/profile';
 
 const app : express.Application = express();
 
@@ -23,6 +24,7 @@ app.use('/api/user', authRoute);
 app.use('/api/home', homeRoute);
 app.use('/api', followRoute);
 app.use('/api/post', postRoute);
+app.use('/api', profileRoute);
 
 
 // Test

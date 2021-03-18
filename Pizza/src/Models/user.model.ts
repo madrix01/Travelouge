@@ -21,4 +21,3 @@ export interface LoginUser{
 export interface TokenUser extends User{
     email : string
 }
-
