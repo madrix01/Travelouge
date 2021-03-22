@@ -6,6 +6,7 @@ export interface User{
     placesVisited : number;
     bio : string;
     timeCreate : number;
+    profilePhotoUrl : string;
 }
 
 export interface NewUser extends User{

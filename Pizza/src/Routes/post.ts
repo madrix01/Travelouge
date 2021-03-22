@@ -8,6 +8,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import {Post} from '../Models/post.model';
 import {promisify} from 'util';
+import imageUpload from '../Utils/imageUpload';
 const unlinkAsync = promisify(fs.unlink);
 
 
@@ -37,23 +38,14 @@ router.post('/', [postMiddleware.userVerify ,postMiddleware.imageUpload] ,async 
     AWS.config.update({region : "us-east-2"});
     var s3 = new AWS.S3({apiVersion : '2006-03-01'});
 
-    var file = req.file.path;
 
-    var fileStream = fs.createReadStream(file);
+    var filePath = req.file.path;
+    var filename = req.file.filename;
+    var mimetype = req.file.mimetype;
+
 
     const body = req.body;
     const cdn_url = process.env.CDN_URL
-    const imageUploadParams = {
-        Bucket : process.env.BUCKET_NAME,
-        Key : path.basename(file),
-        Body : fileStream,
-        ContentType : req.file.mimetype,
-        ContentDisposition: 'inline',
-    }
-
-    console.log(imageUploadParams);
-    
-    console.log(req.file);
     
 
     const postBody : Post = {
@@ -69,15 +61,8 @@ router.post('/', [postMiddleware.userVerify ,postMiddleware.imageUpload] ,async 
     }
     // await postRef.doc()
     // console.log(file.filename);
-    s3.upload(imageUploadParams, async (err, data) => {
-        if(err) {
-            res.status(400).send(err);
-        }else{
-            console.log("Post upload successful", cdn_url + req.file.filename);
-            await unlinkAsync(req.file.path);
-        }
-    })
-
+    await imageUpload({filePath, filename, mimetype})
+        .catch(err => console.log(err));
 
     await postRef.doc(postBody.postId).set(postBody)
         .catch(err => res.send(err));

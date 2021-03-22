@@ -8,8 +8,9 @@ const userRef = db.collection("users");
 const router = express.Router();
 
 router.get('/u/:username',verify ,async (req, res) => {
+    console.log(req.params.username);
     if(req.user.username === req.params.username){
-        var userProfile = req.user;
+        var userProfile = req.user; 
         res.json(userProfile);
     }else{
         const snapShot = await userRef.where('username', "==", req.params.username).get();
@@ -17,13 +18,13 @@ router.get('/u/:username',verify ,async (req, res) => {
             res.json({'error' : 'no user found'});
             return;
         }
-
+        
         snapShot.forEach(doc => {
             const userProfile = doc.data();
             userProfile.password = undefined;
             res.send(userProfile);
         })
-    }
+    }   
 })
 
 

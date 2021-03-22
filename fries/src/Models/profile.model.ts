@@ -7,5 +7,13 @@ export interface ProfileModel {
     bio: string,
     placesVisited: number
     followers: number,
+    profilePhotoUrl : string
 }
 
+export interface NewUser{
+    email : string,
+    username : string,
+    bio : string,
+    password : string,
+    profilePhoto : any
+}
