@@ -1,10 +1,14 @@
 import React from "react";
 import Cookies from 'js-cookie';
 import './login.css'
+import { Redirect } from "react-router";
+import {Button} from '@material-ui/core'
 
 interface LoginState {
   username : string,
   password : string,
+  loggedin : string
+
 }
 
 class Login extends React.Component<{}, LoginState> {
@@ -14,23 +18,28 @@ class Login extends React.Component<{}, LoginState> {
     this.state = {
       username: "",
       password: "",
+      loggedin : "0",
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSumbit = this.handleSumbit.bind(this);
   }
 
-  handleChange(e : React.FormEvent<HTMLInputElement>) {
-      const target = e.currentTarget;
+  handleChange(event : React.FormEvent<HTMLInputElement>) {
+    console.log("Here");
+      
+    const target = event.currentTarget;
       const value : string = target.value;
       const name : string = target.name;
       const n  = name as keyof LoginState
       this.setState({
         [n] : value
       } as Pick<LoginState, keyof LoginState>);
+      return event;
   }
 
   handleSumbit(e : any){
+    console.log('here');
     
     const loginReq = async () => {
       if(this.state.username === "" || this.state.password === ""){
@@ -38,7 +47,7 @@ class Login extends React.Component<{}, LoginState> {
         return;
       }
       
-      var reqBody : LoginState = {
+      var reqBody = {
         username : this.state.username,
         password : this.state.password,
       }
@@ -56,11 +65,14 @@ class Login extends React.Component<{}, LoginState> {
       const data = await response.json();
       console.log(data);
 
-      Cookies.set('authToken', data.authToken, {path : '/'});
-      Cookies.set('verified', '1', {path : '/'});
+      
 
       if(response.status === 200){
-        alert('Logged in successfully');
+        // alert('Logged in successfully');
+        Cookies.set('authToken', data.authToken, {path : '/'});
+        Cookies.set('verified', '1', {path : '/'});
+        Cookies.set('username', this.state.username)
+        this.setState({loggedin : "1"})
       }else{
         alert('Wrong username or password');
       }
@@ -71,18 +83,30 @@ class Login extends React.Component<{}, LoginState> {
   }
   
   render() {
-    return(
+    const LoginInternals = () => {
+      return(
       <div className="login-main">
-        <form onSubmit={this.handleSumbit}>
-          Username: 
-          <input type="text" name="username" value={this.state.username} onChange={this.handleChange} /><br/>
-          Password
-          <input type="password" name="password" value={this.state.password} onChange={this.handleChange} /> <br/>
-          <button type="submit">Login</button>
+        <div className="loginTitle">Login</div>
+        <form onSubmit={this.handleSumbit} autoComplete="off" className="loginForm">
+          <input type="text" name="username" className="loginInput" placeholder="Username"  value={this.state.username} onChange={this.handleChange} /><br/>
+          <input type="password" name="password" className="loginInput" placeholder="Password"  value={this.state.password} onChange={this.handleChange} /> <br/>
+          <Button type="submit" variant="contained" color="primary">Login</Button>
         </form>
-        <a href="/register">Sign up instead ??</a>
       </div>
-    );
+      )
+    }
+    if(this.state.loggedin === '1'){
+      return(
+        <Redirect to='/home'/>
+      )
+    }else{
+
+    }
+    return(
+      <div>
+        {LoginInternals()}
+      </div>
+      )
   }
 }
 

@@ -1,3 +1,5 @@
+import 'module-alias/register'
+
 import * as express from "express"
 import * as cors from 'cors'
 import * as dotenv from 'dotenv';
@@ -12,6 +14,7 @@ import testRoute from '@test/test';
 import followRoute from '@routes/follow';
 import postRoute from '@routes/post';
 import profileRoute from '@routes/profile';
+import feedRoute from '@routes/feed';
 
 const app : express.Application = express();
 
@@ -25,6 +28,7 @@ app.use('/api/home', homeRoute);
 app.use('/api', followRoute);
 app.use('/api/post', postRoute);
 app.use('/api', profileRoute);
+app.use('/api/feed', feedRoute);
 
 
 // Test

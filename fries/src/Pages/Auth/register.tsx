@@ -1,4 +1,4 @@
-import { METHODS } from "node:http";
+import { Button } from "@material-ui/core";
 import React from "react";
 import { NewUser } from "../../Models/profile.model";
 import './register.css'
@@ -61,7 +61,8 @@ class Register extends React.Component<{}, NewUser> {
   render() {
     return (
       <div className="register-main">
-        <form onSubmit={this.handleSubmit}> 
+        <div className="regTitle">Register</div>
+        <form onSubmit={this.handleSubmit} className="regForm"> 
           <input type="text" name="username" value={this.state.username} placeholder="username" onChange={this.handleChange} /><br/>
           <input type="text" name="email" placeholder="email" value={this.state.email} onChange={this.handleChange} /><br/>
           <input type="password" name="password" placeholder="password" value={this.state.password} onChange={this.handleChange} /> <br/>
@@ -69,7 +70,7 @@ class Register extends React.Component<{}, NewUser> {
           <input type="file" onChange={(e) => {
             this.onFileChange(e.target.files)}
           } /><br/>
-          <button type="submit">Login</button>
+          <Button type="submit" color="primary" variant="contained">Login</Button>
         </form>
       </div>
     );

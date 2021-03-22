@@ -1,3 +1,31 @@
 .register-main {
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+input{
+    height: 40px;
+    background: transparent;
+    border-radius: 10px;
+    font-size: 20px;
+    border-style: solid;
+    color: white;
+    text-align: center;
+}
+
+
+.regForm{
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    color: white;   
+}
+
+.regTitle{
+    font-size: 50px;
+    font-weight: bold;
+    color: white;
 }

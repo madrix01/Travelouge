@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { AppBar, makeStyles } from "@material-ui/core";
+import Cookies from 'js-cookie';
+
 
 const useStyles = makeStyles({
   root: {
@@ -42,6 +44,25 @@ const AppBarStyled = () => {
       </div>
     )
   }
+  const RouteVerify = () => {
+    console.log(Cookies.get().verified);
+    
+    if(Cookies.get().verified === '1'){
+      return(
+        <div className={classes.links}>
+          <RouteLink toLink='/home' name='Home'/>
+          <RouteLink toLink={`/u/${Cookies.get().username}`} name='Profile'/>
+        </div>
+      )
+    }else{
+      return(
+        <div className={classes.links}>
+          <RouteLink toLink='/login' name='Login'/>
+          <RouteLink toLink='/register' name='Register'/>
+        </div>
+      )
+    }
+  }
 
   return (
     <div style={{ paddingBottom: "10vh" }}>
@@ -49,10 +70,7 @@ const AppBarStyled = () => {
         <div className={classes.title}>
           Travelouge
         </div>
-        <div className={classes.links}>
-          <RouteLink toLink='/home' name='Home'/>
-          <RouteLink toLink='/home' name='Home'/>
-        </div>
+        {RouteVerify()}
       </AppBar>
     </div>
   );
