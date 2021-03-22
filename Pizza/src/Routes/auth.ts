@@ -3,7 +3,7 @@ const router = express.Router();
 import db from '../initFirebase';
 import * as bycrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
-import {LoginUser, NewUser, TokenUser} from '../Models/user.model'
+import {LoginUser, NewUser, TokenUser} from '@models/user.model'
 import * as uuid from 'uuid';
 import * as multer from 'multer';
 import {promisify} from 'util';

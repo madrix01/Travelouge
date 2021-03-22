@@ -1,14 +1,14 @@
 import * as express from 'express';
-import verify from '../verifyToken';
-import db from '../initFirebase';
+import verify from '@src/verifyToken';
+import db from '@src/initFirebase';
 import * as uuid from 'uuid';
 import * as multer from 'multer';
 import * as AWS from 'aws-sdk';
 import * as fs from 'fs';
 import * as path from 'path';
-import {Post} from '../Models/post.model';
+import {Post} from '@models/post.model';
 import {promisify} from 'util';
-import imageUpload from '../Utils/imageUpload';
+import imageUpload from '@utils/imageUpload';
 const unlinkAsync = promisify(fs.unlink);
 
 
@@ -59,8 +59,6 @@ router.post('/', [postMiddleware.userVerify ,postMiddleware.imageUpload] ,async 
         commentCount : 0,
         likesCount : 0,
     }
-    // await postRef.doc()
-    // console.log(file.filename);
     await imageUpload({filePath, filename, mimetype})
         .catch(err => console.log(err));
 

@@ -1,8 +1,7 @@
 import * as express from 'express';
-import verify from '../verifyToken';
-import db from '../initFirebase';
-import {User} from '../Models/user.model'
-import { LakeFormation } from 'aws-sdk';
+import verify from '@src/verifyToken';
+import db from '@src/initFirebase';
+import {User} from '@models/user.model'
 
 const userRef = db.collection("users");
 const router = express.Router();

@@ -1,4 +1,4 @@
-import {User} from '../Models/user.model';
+import {User} from '@models/user.model';
 
 export interface Follow{
     relationId : string,

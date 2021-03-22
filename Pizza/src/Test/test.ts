@@ -7,8 +7,8 @@ import * as path from "path";
 import * as multer from 'multer';
 import {promisify} from 'util';
 import * as uuid from 'uuid';
-import imgCompress from '../Utils/imageCompress'
-import imageUpload from '../Utils/imageUpload';
+import imgCompress from '@utils/imageCompress'
+import imageUpload from '@utils/imageUpload';
 const unlinkAsync = promisify(fs.unlink);
 
 var storage = multer.diskStorage({

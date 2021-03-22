@@ -3,7 +3,7 @@ import verify from '../verifyToken';
 
 const router = express.Router();
 import db from '../initFirebase';
-import {Follow} from '../Models/follow.model';
+import {Follow} from '@models/follow.model';
 import * as uuid from 'uuid';
 import { firestore } from 'firebase-admin';
 

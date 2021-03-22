@@ -8,7 +8,14 @@
 		"typeRoots": [
 			"@types",
 			"./node_modules/@types"
-		]	
+		],
+		"paths": {
+			"@models/*" : ["./src/Models/*"],
+			"@routes/*" : ["./src/Routes/*"],
+			"@utils/*" : ["./src/Utils/*"],
+			"@test/*" : ["./src/Test/*"],
+			"@src/*" : ["./src/*"]
+		}	
 	},
     "include": ["./src"],
 }

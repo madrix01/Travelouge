@@ -6,12 +6,12 @@ import * as cookieParser from 'cookie-parser';
 dotenv.config();
 
 // Routes
-import authRoute from './Routes/auth';
-import homeRoute from './Routes/home';
-import testRoute from './Test/test';
-import followRoute from './Routes/follow';
-import postRoute from './Routes/post';
-import profileRoute from './Routes/profile';
+import authRoute from '@routes/auth';
+import homeRoute from '@routes/home';
+import testRoute from '@test/test';
+import followRoute from '@routes/follow';
+import postRoute from '@routes/post';
+import profileRoute from '@routes/profile';
 
 const app : express.Application = express();
 
