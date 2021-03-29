@@ -5,6 +5,8 @@ import * as cors from 'cors'
 import * as dotenv from 'dotenv';
 import * as cookieParser from 'cookie-parser';
 
+
+
 dotenv.config();
 
 // Routes
@@ -17,6 +19,7 @@ import profileRoute from '@routes/profile';
 import feedRoute from '@routes/feed';
 
 const app : express.Application = express();
+
 
 app.use(cors());
 app.use(express.json());
@@ -40,5 +43,5 @@ app.get('/', (req, res) => {
 })
 
 app.listen(6969, () => {
-    console.log("Travelouge running on 6969");
+    console.log("🚀 running on 6969");
 })

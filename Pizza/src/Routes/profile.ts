@@ -1,29 +1,35 @@
 import * as express from 'express';
 import verify from '@src/verifyToken';
 import db from '@src/initFirebase';
-import {User} from '@models/user.model'
+import {GET_ASYNC, SET_ASYNC} from '@src/redisConnect';
 
 const userRef = db.collection("users");
 const router = express.Router();
 
+
 router.get('/u/:username',verify ,async (req, res) => {
-    console.log(req.params.username);
     if(req.user.username === req.params.username){
         var userProfile = req.user; 
         res.json(userProfile);
     }else{
+        const cached_data = await GET_ASYNC(`profile ${req.params.username}`);
+        if(cached_data){
+            res.json(JSON.parse(cached_data));
+            return;
+        }
         const snapShot = await userRef.where('username', "==", req.params.username).get();
         if(snapShot.empty){
             res.json({'error' : 'no user found'});
             return;
         }
-        
-        snapShot.forEach(doc => {
-            const userProfile = doc.data();
+        snapShot.forEach(async doc =>  {
+            var userProfile = doc.data();
             userProfile.password = undefined;
-            res.send(userProfile);
+            await SET_ASYNC(`profile ${req.params.username}`, JSON.stringify(userProfile), 'EX', 3600)
+            res.json(userProfile)
+            return;
         })
-    }   
+    }
 })
 
 

@@ -6,7 +6,7 @@
     align-items: center;
 }
 
-input{
+.regForm input{
     height: 40px;
     background: transparent;
     border-radius: 10px;

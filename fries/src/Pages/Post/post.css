@@ -1,0 +1,30 @@
+.post-main {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.postTitle{
+    font-size: 50px;
+    font-weight: bold;
+    color: white;
+}
+
+.postForm {
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    color: white;
+}
+
+.postForm input {
+    height: 40px;
+    background: transparent;
+    border-radius: 10px;
+    font-size: 20px;
+    border-style: solid;
+    color: white;
+    text-align: center;
+}

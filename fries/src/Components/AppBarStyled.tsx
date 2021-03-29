@@ -52,6 +52,7 @@ const AppBarStyled = () => {
         <div className={classes.links}>
           <RouteLink toLink='/home' name='Home'/>
           <RouteLink toLink={`/u/${Cookies.get().username}`} name='Profile'/>
+          <RouteLink toLink="/post/add" name="Post" />
         </div>
       )
     }else{

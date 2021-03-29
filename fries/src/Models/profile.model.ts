@@ -1,3 +1,10 @@
+interface PostProps {
+    title : string
+    description : string
+    imageUrl : string    
+}
+
+
 export interface ProfileModel {
     email: string
     timeCreate : number
@@ -7,7 +14,8 @@ export interface ProfileModel {
     bio: string,
     placesVisited: number
     followers: number,
-    profilePhotoUrl : string
+    profilePhotoUrl : string,
+    posts : PostProps[]
 }
 
 export interface NewUser{
