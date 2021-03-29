@@ -7,7 +7,7 @@ import * as AWS from 'aws-sdk';
 import * as fs from 'fs';
 import {Post} from '@models/post.model';
 import {promisify} from 'util';
-import {GET_ASYNC, SET_ASYNC} from '@src/redisConnect'
+import {GET_ASYNC, SET_ASYNC, DEL_ASYNC} from '@src/redisConnect'
 import imageUpload from '@utils/imageUpload';
 const unlinkAsync = promisify(fs.unlink);
 
@@ -63,6 +63,9 @@ router.post('/', [postMiddleware.userVerify ,postMiddleware.imageUpload] ,async 
     }
     await imageUpload({filePath, filename, mimetype})
         .catch(err => console.log(err));
+
+    // Clear cache
+    await DEL_ASYNC(`mpost ${req.user.username}`)
 
     await postRef.doc(postBody.postId).set(postBody)
         .catch(err => res.send(err));

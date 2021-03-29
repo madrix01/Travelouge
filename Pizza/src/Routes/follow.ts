@@ -16,6 +16,9 @@ router.get("/follow/:followId", verify, async (req, res) => {
     if(req.user.id === req.params.followId) {
         res.json({error : "cannot follow logged in user"});
     }
+
+    if()
+
     const followRelation : Follow = {
         following : req.params.followId,
         follower : req.user.id,
@@ -27,6 +30,8 @@ router.get("/follow/:followId", verify, async (req, res) => {
     
     await followRef.doc(followRelation.relationId).set(followRelation)
     .catch(err => {res.send(err)});
+
+    
 
     // increase following
     await userRef.doc(req.user.id).update({

@@ -1,6 +1,7 @@
 import React from 'react';
 import Cookie from 'js-cookie';
 import { Redirect, useHistory} from 'react-router-dom';
+import AppBarStyled from '../../Components/AppBarStyled'
 
 interface HomeState{
     name : string
@@ -59,6 +60,7 @@ class Home extends React.Component<{}, HomeState> {
         }
         return(
             <div>
+                <AppBarStyled/>
                 <h1>Hello, {this.state.name}</h1>
                 {this.redirectTo()}
                 <button onClick={this.onLogout}>Logout</button>

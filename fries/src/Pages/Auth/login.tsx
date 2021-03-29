@@ -2,7 +2,8 @@ import React from "react";
 import Cookies from 'js-cookie';
 import './login.css'
 import { Redirect } from "react-router";
-import {Button} from '@material-ui/core'
+import {Button} from '@material-ui/core';
+import AppBarStyled from '../../Components/AppBarStyled'
 
 interface LoginState {
   username : string,
@@ -104,6 +105,7 @@ class Login extends React.Component<{}, LoginState> {
     }
     return(
       <div>
+        <AppBarStyled/>
         {LoginInternals()}
       </div>
       )

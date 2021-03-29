@@ -45,6 +45,8 @@ const AppBarStyled = () => {
     )
   }
   const RouteVerify = () => {
+    const [loggedIn, setLoggedIn] = useState(Cookies.get().verified);
+    
     console.log(Cookies.get().verified);
     
     if(Cookies.get().verified === '1'){
@@ -53,6 +55,7 @@ const AppBarStyled = () => {
           <RouteLink toLink='/home' name='Home'/>
           <RouteLink toLink={`/u/${Cookies.get().username}`} name='Profile'/>
           <RouteLink toLink="/post/add" name="Post" />
+          {/* <RouteLink toLink= "/logout"/> */}
         </div>
       )
     }else{

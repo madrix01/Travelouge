@@ -1,7 +1,7 @@
 interface PostProps {
     title : string
     description : string
-    imageUrl : string    
+    imageURL : string    
 }
 
 
@@ -14,8 +14,9 @@ export interface ProfileModel {
     bio: string,
     placesVisited: number
     followers: number,
-    profilePhotoUrl : string,
+    profilePhotoUrl : string
     posts : PostProps[]
+    isSameAsUser : boolean
 }
 
 export interface NewUser{

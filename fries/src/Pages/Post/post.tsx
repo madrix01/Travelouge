@@ -3,6 +3,7 @@ import {PostModel} from '../../Models/post.model'
 import { Button } from "@material-ui/core";
 import './post.css'
 import Cookies from 'js-cookie'
+import AppBarStyled from '../../Components/AppBarStyled'
 
 class NewPost extends React.Component<{} , PostModel> {
     constructor(props : any){
@@ -46,9 +47,11 @@ class NewPost extends React.Component<{} , PostModel> {
                     "authToken" : Cookies.get().authToken
                 }
             })
-
             const data = await response.json();
             console.log(data);
+            if(response.status === 200){
+                alert("New post created")
+            }
         }
         postReq();
         e.preventDefault();
@@ -60,6 +63,7 @@ class NewPost extends React.Component<{} , PostModel> {
     render(){
         return(
             <div className="post-main">
+                <AppBarStyled/>
                 <div className="postTitle">New Post</div>
                 <form onSubmit={this.handleSubmit} className="postForm">
                     <input type="text" name="title" value={this.state.title} placeholder="title" onChange={this.handleChange} /><br/>

@@ -2,6 +2,7 @@ import { Button } from "@material-ui/core";
 import React from "react";
 import { NewUser } from "../../Models/profile.model";
 import './register.css'
+import AppBarStyled from '../../Components/AppBarStyled'
 
 class Register extends React.Component<{}, NewUser> {
   constructor(props: any) {
@@ -61,6 +62,7 @@ class Register extends React.Component<{}, NewUser> {
   render() {
     return (
       <div className="register-main">
+        <AppBarStyled />
         <div className="regTitle">Register</div>
         <form onSubmit={this.handleSubmit} className="regForm"> 
           <input type="text" name="username" value={this.state.username} placeholder="username" onChange={this.handleChange} /><br/>

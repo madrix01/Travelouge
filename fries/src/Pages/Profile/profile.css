@@ -1,6 +1,7 @@
 .profile-name {
     font-size: 40px;
     text-align: center;
+    color: white;
 }
 
 .profile-bio {
@@ -10,6 +11,16 @@
 }
 
 .profile-main img{
+}
+
+.pstMain {
+    margin: 50px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.profilePhoto{
     height: 300px;
     width: 300px;
     object-fit: cover;

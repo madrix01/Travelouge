@@ -6,7 +6,7 @@ const PostCard = (props: any) => {
     return(
         <div>
             <Card className="card-root" style={{backgroundColor: "#2c2c2c"}}>
-                <img src="https://d94fgasd2olqz.cloudfront.net/eab0bc78-9ee9-45e8-a8fa-090c0f5bcf8f.png" alt=""/>
+                <img src={props.imageURL} alt=""/>
                 <div className="card-title">
                     {props.title}
                 </div>
