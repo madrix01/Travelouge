@@ -76,32 +76,53 @@ router.get('/:username',verify , async (req, res) => {
     
     const cachedData = await GET_ASYNC(`mpost ${req.params.username}`)
     if(cachedData) {
+        console.log("Cached POsts");
+        
         res.json(JSON.parse(cachedData))
         return;
-    } 
+    }
 
-    const getUserId = async () => {
-        const cachedUser = await GET_ASYNC(`profile ${req.params.username}`)
-        if(cachedUser){
-            const data = JSON.parse(cachedUser).id
-            return data;
-        }
+    let uid;
 
-        const snapShot = await userRef.where("username", "==", req.params.username).get()
-
-        if(snapShot.empty) res.status(400).json({"error" : "no user found"})
-
-        snapShot.forEach(async (docs) => {
-            const data = docs.data();
-            await SET_ASYNC(`profile ${req.params.username}`, JSON.stringify(data), "EX", "3600")
-            return data.id
+    // get user id;
+    // console.log("[Get user called]");
+    
+    const cachedUser = await GET_ASYNC(`profile ${req.params.username}`)
+    if(cachedUser){
+        console.log("[Cached]");
+        uid = JSON.parse(cachedUser)
+        // console.log("[Cached]", uid);
+    }else if(!cachedData){
+        console.log("[Non cached]");
+        
+        uid = await userRef.where("username", "==", req.params.username).get().then(async (data) => {
+            if(data.empty){
+                return null; 
+            }
+            const temp = [];
+            data.forEach((doc) => {
+                temp.push(doc.data());
+            })
+            await SET_ASYNC(`profile ${req.params.username}`, JSON.stringify(temp[0]), "EX", 1000);
+            console.log(`profile ${req.params.username}`);            
+            return temp[0];
         })
-    } 
+    }
+    
+    console.log("[Yd]" ,uid);
+    
+    if(!uid) {
+        return res.json({"error" : "1No posts"})
+    }
 
-    const userId = await getUserId();
+    const userId = uid.id;
+    console.log("[User id]" ,userId);
+    debugger;
     const snapShot = await postRef.where("userId", "==", userId).get()
     
     if(snapShot.empty){
+        console.log("Here");
+        
         res.json({"error" : "no posts yet"})
         return;
     }

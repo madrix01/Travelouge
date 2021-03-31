@@ -71,6 +71,8 @@ class Profile extends React.Component<ProfileProps & RouteProps, ProfileModel>{
         if(res.status === 200){
             this.setState({followers : this.state.followers + 1})
             alert(`Followed ${this.state.username}`)
+        }else{
+            alert('Already following')
         }
     }
 

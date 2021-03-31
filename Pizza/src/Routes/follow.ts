@@ -17,11 +17,25 @@ router.get("/follow/:followId", verify, async (req, res) => {
         res.json({error : "cannot follow logged in user"});
     }
 
-    if()
+    const yd = await followRef.where('fsource', '==', req.user.id).get().then((ss) => {
+        const temp = []
+        ss.forEach((doc) => {
+            temp.push(doc.data());
+        })
+        return temp; 
+    })
+    if(yd.length != 0){
+        for(let doc of yd){
+            if(doc.fdesti === req.params.followId){
+                console.log(doc.fdesti);
+                return res.json({"error" : "already followed"})
+            }
+        }
+    }
 
     const followRelation : Follow = {
-        following : req.params.followId,
-        follower : req.user.id,
+        fdesti : req.params.followId,
+        fsource : req.user.id,
         relationId : uuid.v4(),
         time : Date.now(),
     }
@@ -31,7 +45,6 @@ router.get("/follow/:followId", verify, async (req, res) => {
     await followRef.doc(followRelation.relationId).set(followRelation)
     .catch(err => {res.send(err)});
 
-    
 
     // increase following
     await userRef.doc(req.user.id).update({
@@ -41,8 +54,9 @@ router.get("/follow/:followId", verify, async (req, res) => {
     await userRef.doc(req.params.followId).update({
         followers : firestore.FieldValue.increment(1)
     })
-
-    res.json(followRelation);
+    
+    console.log("[ Here 2 ]")
+    return res.send(followRelation);
 })
 
 router.get("/unfollow/:relationId", verify, async (req, res) => {
