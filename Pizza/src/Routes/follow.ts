@@ -27,8 +27,8 @@ router.get("/follow/:followId", verify, async (req, res) => {
     if(yd.length != 0){
         for(let doc of yd){
             if(doc.fdesti === req.params.followId){
-                console.log(doc.fdesti);
-                return res.json({"error" : "already followed"})
+                console.log("Already following");
+                return res.status(400).json({"error" : "already followed"})
             }
         }
     }

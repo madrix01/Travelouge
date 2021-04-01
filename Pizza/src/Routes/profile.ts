@@ -10,7 +10,7 @@ const router = express.Router();
 router.get('/u/:username',verify ,async (req, res) => {
     if(req.user.username === req.params.username){
         var userProfile = req.user; 
-        res.json(userProfile);
+        return res.json(userProfile);
     }else{
         const cached_data = await GET_ASYNC(`profile ${req.params.username}`);
         if(cached_data){
@@ -19,7 +19,7 @@ router.get('/u/:username',verify ,async (req, res) => {
         }
         const snapShot = await userRef.where('username', "==", req.params.username).get();
         if(snapShot.empty){
-            res.json({'error' : 'no user found'});
+            res.status(404).json({'error' : 'no user found'});
             return;
         }
         snapShot.forEach(async doc =>  {
