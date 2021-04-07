@@ -4,6 +4,7 @@ import * as fs from 'fs';
 import db from '@src/initFirebase'
 import * as multer from 'multer';
 import * as uuid from 'uuid';
+import * as aquarelle from 'aquarelle'
 import verify from '@src/verifyToken';
 
 
@@ -17,9 +18,9 @@ router.get('/follow/:userId', verify ,async (req, res) => {
     res.send("Follow done")
 })
 
-router.post("/up", multer().single('upl') ,async (req, res) => {
-    console.log(req.file);
-    res.send("Lool noob");
+router.get("/up",async (req, res) => {
+    const x = await aquarelle(128, 128, 'public/uploads').then(console.log("Uploaded"))
+      res.send(`${x.filePath} ${x.fileName}`)
 })
 
 

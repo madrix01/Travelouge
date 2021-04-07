@@ -1,39 +1,23 @@
-import {GoogleMap, Marker, withScriptjs, withGoogleMap} from 'react-google-maps'
 import React from 'react'
+import {Map, GoogleApiWrapper} from 'google-maps-react';
 
-// const MapComponent = withGoogleMap((props : any) => {
-//     return(
-//         <GoogleMap 
-//             defaultZoom ={8}
-//             defaultCenter = {{lat: -34.397, lng: 150.644}}
-//         >
-
-//         {props.isMarkerShown && <Marker position={{ lat: -34.397, lng: 150.644 }} />}
-
-//         </GoogleMap>
-//     )
-// })
-{/* <MapComponent isMarkerShown={false} /> */}
-
-class MapComponent extends React.Component {
+class GmapComponent extends React.Component<{google : any}> {
+    
+    map?: google.maps.Map
     render(){
-        const GoogleMapE = withGoogleMap((props : any) => (
-            <GoogleMap
-                defaultCenter = { { lat: 40.756795, lng: -73.954298 } }
-                defaultZoom = { 13 }
-            >
-            </GoogleMap>
-        ))
         return(
-            <div>
-                <GoogleMapE
-                    containerElement={ <div style={{ height: `500px`, width: '500px' }} /> }
-                    mapElement={ <div style={{ height: `100%` }} /> }
-                />
-            </div>
+            <Map
+                google={google}
+                zoom={8}
+                style={{height: "500px", width: "500px"}}
+                initialCenter={{ lat: 47.444, lng: -122.176}}
+        />
         )
     }
 }
 
-
-export default MapComponent
+export default GoogleApiWrapper(
+    (props: any) => ({
+        apiKey : "AIzaSyCnMoEeOmEshKhgY_gy5jsNGJh9iFdlXo8"
+    })
+)(GmapComponent)

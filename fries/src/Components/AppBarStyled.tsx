@@ -6,7 +6,7 @@ import Cookies from 'js-cookie';
 const useStyles = makeStyles({
   root: {
     height: "10vh",
-    background: "black",
+    background: "#0b0e11",
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
@@ -16,7 +16,7 @@ const useStyles = makeStyles({
     width: "100%",
     textAlign: "left",
     fontSize : "30px",
-    marginLeft : "5px"
+    marginLeft : "10px"
   },
   links : {
     textAlign : "right",
@@ -26,7 +26,7 @@ const useStyles = makeStyles({
   link : {
     marginLeft: "5px",
     marginRight : "5px"
-  }
+  },
 });
 
 const AppBarStyled = () => {
@@ -70,7 +70,7 @@ const AppBarStyled = () => {
 
   return (
     <div style={{ paddingBottom: "10vh" }}>
-      <AppBar className={classes.root}>
+      <AppBar className={classes.root} elevation={0} >
         <div className={classes.title}>
           Travelouge
         </div>

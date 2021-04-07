@@ -10,22 +10,41 @@
     text-align: center;
 }
 
-.profile-main img{
-}
-
 .pstMain {
-    margin: 50px;
+    margin: 15px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
 }
 
 .profilePhoto{
-    height: 300px;
-    width: 300px;
+    height: 250px;
+    width: 250px;
     object-fit: cover;
     border-radius: 50%;
     display: block;
+    margin-top: 10px;
     margin-left: auto;
     margin-right: auto;
+}
+
+.profileLeft{
+    width: 100%;
+    background: #242c37;
+    flex: 1;
+    margin: 10px;
+    border-radius: 20px;
+}
+.profileMid{
+    width: 100%;
+    background: #242c37;
+    flex: 3;
+    margin: 10px;
+    border-radius: 20px;
+    overflow: scroll;
+    height: 500px;
+}
+
+.profile-main{
+    display: flex;
 }

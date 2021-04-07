@@ -14,8 +14,8 @@ const unlinkAsync = promisify(fs.unlink);
 
 
 const router = express.Router();
-const postRef = db.collection('posts');
-const userRef = db.collection('users')
+const postRef = db.collection('posts')
+const userRef = db.collection('users');
 
 
 var storage = multer.diskStorage({
@@ -118,7 +118,7 @@ router.get('/:username',verify , async (req, res) => {
     const userId = uid.id;
     console.log("[User id]" ,userId);
     debugger;
-    const snapShot = await postRef.where("userId", "==", userId).get()
+    const snapShot = await postRef.where("userId", "==", userId).orderBy("timeCreate", "desc").get()
     
     if(snapShot.empty){
         console.log("Here");

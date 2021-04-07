@@ -1,16 +1,13 @@
 import * as express from 'express';
-const router = express.Router();
-import db from '../initFirebase';
 import * as bycrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
-import {LoginUser, NewUser, TokenUser} from '@models/user.model'
 import * as uuid from 'uuid';
 import * as multer from 'multer';
-import {promisify} from 'util';
-import * as fs from 'fs';
-import * as AWS from 'aws-sdk';
-const unlinkAsync = promisify(fs.unlink)
-import * as path from 'path';
+import * as aquarelle from 'aquarelle';
+import db from '../initFirebase';
+import {LoginUser, NewUser, TokenUser} from '@models/user.model'
+import imageUpload from '@utils/imageUpload'
+const router = express.Router();
 
 const userRef = db.collection('users');    
 
@@ -22,7 +19,7 @@ var storage = multer.diskStorage({
 })
 
 const postMiddleware = {
-    imageUpload : multer({storage : storage}).single("profilePhoto"),
+    imgUpload : multer({storage : storage}).single("profilePhoto"),
 }
 
 
@@ -30,26 +27,16 @@ router.get('/register', async (req, res) => {
     res.json({page : "register"});
 })
 
-router.post('/register', postMiddleware.imageUpload ,async (req, res) => {
+router.post('/register', postMiddleware.imgUpload ,async (req, res) => {
     console.log('Request Recieved');
 
-    AWS.config.update({region : "us-east-2"});
-    var s3 = new AWS.S3({apiVersion : '2006-03-01'});
 
-    var file = req.file.path;
-    var fileStream = fs.createReadStream(file);
+    if(!req.file){
+        console.info("No image found");
+    }
 
     const body : NewUser = req.body;
     const cdn_url = process.env.CDN_URL;
-    console.log(body);
-    
-    const imageUploadParams = {
-        Bucket : process.env.BUCKET_NAME,
-        Key : path.basename(file),
-        Body : fileStream,
-        ContentType : req.file.mimetype,
-        ContentDisposition: 'inline',
-    }
 
     const usernameExsists = await userRef.where("username", "==", req.body.username).get();
     const emailExsists = await userRef.where("email", "==", req.body.email).get();
@@ -63,6 +50,26 @@ router.post('/register', postMiddleware.imageUpload ,async (req, res) => {
         const salt = await bycrypt.genSalt(10);
         const hashPass = await bycrypt.hash(password, salt);
 
+        
+        
+        let filePath : string
+        let filename : string
+        let mimetype : string
+        
+        if(!req.file){
+            console.log("No file found");
+            const genFile = await aquarelle(256, 256, 'public/uploads')
+            filePath = genFile.filePath
+            filename = genFile.fileName
+            mimetype = "image/png"
+            console.log(filePath, filename, mimetype);
+        }else{
+            console.log("File found");
+            filePath = req.file.path;
+            filename = req.file.filename;
+            mimetype = req.file.mimetype;
+        }
+
         var newUserConfirm : NewUser = {
             username : body.username,
             email : body.email,
@@ -73,21 +80,16 @@ router.post('/register', postMiddleware.imageUpload ,async (req, res) => {
             bio : body.bio || "",
             timeCreate : Date.now(),
             id : uuid.v4(),
-            profilePhotoUrl : cdn_url + req.file.filename
+            profilePhotoUrl : cdn_url + filename
         };
-
-        s3.upload(imageUploadParams, async(err, data) => {
-            if(err) {
-                res.status(400).send(err);
-            }else{
-                //pass
-            }
-        })
+        
+        await imageUpload({filePath, filename, mimetype})
 
         await userRef.doc(newUserConfirm.id).set(newUserConfirm)
-        .then(() => {res.json(newUserConfirm)})
+        .then(() => {res.status(200).json(newUserConfirm)})
         .catch(err => {res.send(err)})
     }
+
 })
 
 router.post('/login', async (req, res) => {

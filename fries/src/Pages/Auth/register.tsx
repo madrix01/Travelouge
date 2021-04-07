@@ -46,9 +46,12 @@ class Register extends React.Component<{}, NewUser> {
         method : "POST",
         body : formData,
       })
-      // const response = await fetch('http://localhost:6969/api/user/register')
       const data = await response.json();
       console.log(data);
+      if(response.status === 200){
+        alert("New user created")
+        window.location.replace("/login");
+      }
     }
     registerReq();
     e.preventDefault();
@@ -65,14 +68,14 @@ class Register extends React.Component<{}, NewUser> {
         <AppBarStyled />
         <div className="regTitle">Register</div>
         <form onSubmit={this.handleSubmit} className="regForm"> 
-          <input type="text" name="username" value={this.state.username} placeholder="username" onChange={this.handleChange} /><br/>
-          <input type="text" name="email" placeholder="email" value={this.state.email} onChange={this.handleChange} /><br/>
-          <input type="password" name="password" placeholder="password" value={this.state.password} onChange={this.handleChange} /> <br/>
-          <input type="text" name="bio" placeholder="bio" value={this.state.bio} onChange={this.handleChange} /><br/>
+          <input type="text" name="username" value={this.state.username} placeholder="username" onChange={this.handleChange} autoComplete="off" required /><br/>
+          <input type="text" name="email" placeholder="email" value={this.state.email} onChange={this.handleChange} autoComplete="off" required /><br/>
+          <input type="password" name="password" placeholder="password" value={this.state.password} onChange={this.handleChange} autoComplete="off" required /> <br/>
+          <input type="text" name="bio" placeholder="bio" value={this.state.bio} onChange={this.handleChange} autoComplete="off" /><br/>
           <input type="file" onChange={(e) => {
             this.onFileChange(e.target.files)}
           } /><br/>
-          <Button type="submit" color="primary" variant="contained">Login</Button>
+          <Button type="submit" color="primary" variant="contained">Register</Button>
         </form>
       </div>
     );

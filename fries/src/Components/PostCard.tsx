@@ -5,7 +5,7 @@ import './styles/PostCard.css'
 const PostCard = (props: any) => {
     return(
         <div>
-            <Card className="card-root" style={{backgroundColor: "#2c2c2c"}}>
+            <Card className="card-root" style={{backgroundColor: "#323d4d", borderRadius: "10px"}}>
                 <img src={props.imageURL} alt=""/>
                 <div className="card-title">
                     {props.title}

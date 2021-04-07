@@ -2,10 +2,13 @@ import React from 'react';
 import Cookie from 'js-cookie';
 import { Redirect, useHistory} from 'react-router-dom';
 import AppBarStyled from '../../Components/AppBarStyled'
+import ReactMarkdown from 'react-markdown';
+import './home.css'
 
 interface HomeState{
     name : string
     verified : boolean
+    markdown : string
 }
 
 class Home extends React.Component<{}, HomeState> {
@@ -15,21 +18,39 @@ class Home extends React.Component<{}, HomeState> {
         this.state = {
             name : "loading",
             verified : true,
+            markdown : ""
         }
 
         this.getUser = this.getUser.bind(this);
         this.onLogout = this.onLogout.bind(this);
+        this.getReadme = this.getReadme.bind(this);
     }
 
     async getUser() {
         const res = await fetch('http://localhost:6969/api/home', {headers : {authToken : Cookie.get().authToken}});
         const data = await res.json();
-
         console.log(data);
         return data;
     }
 
+    async getReadme(){
+        // const readmePath = require("../../Assets/README.md");
+        await fetch('https://raw.githubusercontent.com/madrix01/Travelouge/main/fries/README.md?token=AMIIOX6ODZ7DNNHH5LVC273AO2S5I')
+            .then(response => {
+                return response.text();
+            })
+            .then(text => {
+                this.setState({
+                    markdown : text
+                })
+            })
+
+        console.log(this.state.markdown);
+        
+    }
+
     async componentDidMount() {
+        await this.getReadme();
         const luser= await this.getUser();
         if(luser){
             this.setState({name : luser.username, verified: true});
@@ -55,15 +76,17 @@ class Home extends React.Component<{}, HomeState> {
     }
 
     render() {
-        const lgout = () => {
-            
+        const lgout = () => {   
         }
         return(
-            <div>
+            <div className="homeMain">
                 <AppBarStyled/>
                 <h1>Hello, {this.state.name}</h1>
-                {this.redirectTo()}
                 <button onClick={this.onLogout}>Logout</button>
+                <div className="homeMd">
+                    <ReactMarkdown source={this.state.markdown} />
+                </div>
+                {this.redirectTo()}
             </div>
         )   
     }

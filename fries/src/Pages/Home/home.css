@@ -1,0 +1,13 @@
+.homeMain{
+    text-align: center;
+}
+
+.homeMd{
+    text-align: left;
+    margin: auto;
+    width: 50%;
+    border: none;
+    padding: 10px;
+    border-radius: 20px;
+    background: #242c37;
+}

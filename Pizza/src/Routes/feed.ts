@@ -13,5 +13,6 @@ router.get('/', async (req, res) => {
 })
 
 // My feed
+router.get('/')
 
 export default router;

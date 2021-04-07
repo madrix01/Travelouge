@@ -89,9 +89,9 @@ class Login extends React.Component<{}, LoginState> {
       <div className="login-main">
         <div className="loginTitle">Login</div>
         <form onSubmit={this.handleSumbit} autoComplete="off" className="loginForm">
-          <input type="text" name="username" className="loginInput" placeholder="Username"  value={this.state.username} onChange={this.handleChange} /><br/>
-          <input type="password" name="password" className="loginInput" placeholder="Password"  value={this.state.password} onChange={this.handleChange} /> <br/>
-          <Button type="submit" variant="contained" color="primary">Login</Button>
+          <input type="text" name="username" className="loginInput" placeholder="Username"  value={this.state.username} onChange={this.handleChange} autoComplete="off" /><br/>
+          <input type="password" name="password" className="loginInput" placeholder="Password"  value={this.state.password} onChange={this.handleChange} autoComplete="off" /> <br/>
+          <Button type="submit" variant="contained" style={{backgroundColor : "#fd4d4d"}}>Login</Button>
         </form>
       </div>
       )

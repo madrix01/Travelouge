@@ -13,10 +13,12 @@
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "cookie-parser": "^1.4.5",
+    "google-maps-react": "^2.0.6",
     "js-cookie": "^2.2.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-google-maps": "^9.4.5",
+    "react-markdown": "^5.0.3",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "typescript": "^4.1.2",
@@ -48,6 +50,7 @@
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.2",
+    "@types/google.maps": "^3.44.3",
     "@types/js-cookie": "^2.2.6",
     "@types/react-router-dom": "^5.1.7",
     "eslint-config-react-app": "^6.0.0"
