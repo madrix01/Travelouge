@@ -9,7 +9,7 @@ import {Post} from '@models/post.model';
 import {promisify} from 'util';
 import {GET_ASYNC, SET_ASYNC, DEL_ASYNC} from '@src/redisConnect'
 import imageUpload from '@utils/imageUpload';
-const unlinkAsync = promisify(fs.unlink);
+const  unlinkAsync = promisify(fs.unlink);
 
 
 
@@ -77,7 +77,6 @@ router.get('/:username',verify , async (req, res) => {
     const cachedData = await GET_ASYNC(`mpost ${req.params.username}`)
     if(cachedData) {
         console.log("Cached POsts");
-        
         res.json(JSON.parse(cachedData))
         return;
     }

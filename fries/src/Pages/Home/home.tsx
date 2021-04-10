@@ -35,12 +35,12 @@ class Home extends React.Component<{}, HomeState> {
 
     async getReadme(){
         // const readmePath = require("../../Assets/README.md");
-        await fetch('https://raw.githubusercontent.com/madrix01/Travelouge/main/fries/README.md?token=AMIIOX6ODZ7DNNHH5LVC273AO2S5I')
+        await fetch('https://raw.githubusercontent.com/madrix01/Travelouge/main/fries/README.md?token=AMIIOX2JZI4F7MFZ6Y5EW5DAO3F66')
             .then(response => {
                 return response.text();
             })
             .then(text => {
-                this.setState({
+                this.setState({ 
                     markdown : text
                 })
             })

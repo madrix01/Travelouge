@@ -16,7 +16,7 @@ admin.initializeApp({
 })
 
 console.log("👉Database connected");
-admin.firestore().settings({host : "http://localhost:8080", ssl : false})
+// admin.firestore().settings({host : "http://localhost:8080", ssl : false})
 const db = admin.firestore();
 
 

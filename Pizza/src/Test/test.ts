@@ -10,12 +10,21 @@ import verify from '@src/verifyToken';
 
 const userRef = db.collection('users')
 
-router.get('/follow/:userId', verify ,async (req, res) => {
-    const followRef = db.collection('testfollow').doc(req.user.id);
+router.get('/search' ,async (req, res) => {
+    const snapShot = await userRef.where("username", "==", req.query.q).get().then(
+        async (data) => {
+            if(data.empty){
+                return res.json({"error" : "no user found"});
+            }
+            const temp = [];
+            data.forEach((doc) => {
+                temp.push(doc.data());
+            })
 
-
-    await followRef.collection('followInfo')
-    res.send("Follow done")
+            res.send(temp);
+        }
+    )
+    res.send(req.query.searchq);
 })
 
 router.get("/up",async (req, res) => {

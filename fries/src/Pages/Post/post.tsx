@@ -66,12 +66,12 @@ class NewPost extends React.Component<{} , PostModel> {
                 <AppBarStyled/>
                 <div className="postTitle">New Post</div>
                 <form onSubmit={this.handleSubmit} className="postForm">
-                    <input type="text" name="title" value={this.state.title} placeholder="title" onChange={this.handleChange} /><br/>
-                    <input type="text" name="description" value={this.state.description} placeholder="description" onChange={this.handleChange} /><br/>
+                    <input type="text" name="title" value={this.state.title} placeholder="title" onChange={this.handleChange} className="postInput" autoComplete="off" /><br/>
+                    <input type="text" name="description" value={this.state.description} placeholder="description" onChange={this.handleChange} className="postInput" autoComplete="off" /><br/>
                     <input type="file" onChange={(e) => {
                         this.onFileChange(e.target.files)}
                     } /><br/>
-                <Button type="submit" color="primary" variant="outlined">Post</Button>
+                <Button type="submit"  variant="outlined" style={{backgroundColor : "#fd4d4d"}}>Post</Button>
                 </form>
             </div>
         )

@@ -6,6 +6,7 @@ import db from '../initFirebase';
 import {Follow} from '@models/follow.model';
 import * as uuid from 'uuid';
 import { firestore } from 'firebase-admin';
+import {GET_ASYNC, SET_ASYNC} from '@src/redisConnect';
 
 
 const userRef = db.collection('users');
@@ -39,14 +40,12 @@ router.get("/follow/:followId", verify, async (req, res) => {
         relationId : uuid.v4(),
         time : Date.now(),
     }
-
-    console.log(followRelation.relationId);
-    
     await followRef.doc(followRelation.relationId).set(followRelation)
     .catch(err => {res.send(err)});
 
 
     // increase following
+
     await userRef.doc(req.user.id).update({
         followings : firestore.FieldValue.increment(1)
     })
@@ -54,8 +53,22 @@ router.get("/follow/:followId", verify, async (req, res) => {
     await userRef.doc(req.params.followId).update({
         followers : firestore.FieldValue.increment(1)
     })
-    
-    console.log("[ Here 2 ]")
+
+    // Updating cache 
+    await userRef.doc(req.user.id).get()
+        .then(doc => {
+            if(doc.exists){
+                SET_ASYNC(`profile ${doc.data().username}`, JSON.stringify(doc.data()), "EX", 3600);
+            }
+        })
+    await userRef.doc(req.params.followId).get()
+        .then(doc => {
+            if(doc.exists){
+                SET_ASYNC(`profile ${doc.data().username}`, JSON.stringify(doc.data()), "EX", 3600);
+            }
+        })
+
+
     return res.send(followRelation);
 })
 

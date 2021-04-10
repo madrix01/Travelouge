@@ -6,6 +6,7 @@ import './profile.css'
 import PostCard from '../../Components/PostCard'
 import AppBarStyled from '../../Components/AppBarStyled'
 import {Button} from '@material-ui/core'
+import axios from 'axios';
 
 interface ProfileParams {
     username : string
@@ -26,6 +27,7 @@ class Profile extends React.Component<ProfileProps & RouteProps, ProfileModel>{
         super(props);
 
         this.state = {
+            userExsist : false,
             email: "",
             timeCreate : 0,
             followings: 0,
@@ -44,9 +46,16 @@ class Profile extends React.Component<ProfileProps & RouteProps, ProfileModel>{
     }
 
     async getUser() {
-        const res = await fetch(`http://localhost:6969/api/u/${this.props.match.params.username}`, {headers : {authToken : Cookie.get().authToken}});
-        const data = await res.json();
-        return data;
+        const response = await axios.get(`http://localhost:6969/api/u/${this.props.match.params.username}`, {
+            headers : {authToken : Cookie.get().authToken}
+        })
+        if(response.status === 200){
+            this.setState({
+                userExsist : true
+            })
+            const data = response.data;
+            return data;
+        }
     }
 
     async getPosts() {
@@ -62,6 +71,7 @@ class Profile extends React.Component<ProfileProps & RouteProps, ProfileModel>{
                 "authToken" : Cookie.get().authToken
             }
         })
+        console.log(res.status);
         
         if(res.status === 200){
             this.setState({followers : this.state.followers + 1})
@@ -84,6 +94,7 @@ class Profile extends React.Component<ProfileProps & RouteProps, ProfileModel>{
         if(posts) {
             this.setState({posts : posts})
         }
+        // console.log(this.state);
     }
 
 
@@ -99,13 +110,13 @@ class Profile extends React.Component<ProfileProps & RouteProps, ProfileModel>{
         }
 
         const PostsDiv =  () => {
-            console.log(this.state.posts);
+            // console.log(this.state.posts);
             if(this.state.posts.length > 0 ){
                 return(
                     <div className="pstMain">
                         {this.state.posts.map((pst : PostProps, index) => (
                             <div>
-                                {console.log(pst.imageURL)}
+                                {/* {console.log(pst.imageURL)} */}
                                 <PostCard 
                                     title={pst.title}
                                     imageURL={pst.imageURL}
@@ -132,30 +143,37 @@ class Profile extends React.Component<ProfileProps & RouteProps, ProfileModel>{
                 </div>
             )
         }
-        return(
-            <div>
-                <AppBarStyled />
-                <div className="profile-main">
-                    <div className="profileLeft">
-                        <img src={this.state.profilePhotoUrl} alt="[ Profile Photo ]" className="profilePhoto"/>
-                        <div className="profile-name">
-                            {this.state.username}
+        console.log(this.state.userExsist)
+        if(this.state.userExsist){
+            return(
+                <div>
+                    <AppBarStyled />
+                    <div className="profile-main">
+                        <div className="profileLeft">
+                            <img src={this.state.profilePhotoUrl} alt="[ Profile Photo ]" className="profilePhoto"/>
+                            <div className="profile-name">
+                                {this.state.username}
+                            </div>
+                            <div className="profile-bio">
+                                {this.state.bio} <br/>
+                                Travelouge Age : {Math.floor(age())} days <br/>
+                                Followings : {this.state.followings} Followers : {this.state.followers} <br/>
+                                PlacesVisited : {this.state.placesVisited} <br/>
+                                {followBtn}
+                            </div>
                         </div>
-                        <div className="profile-bio">
-                            {this.state.bio} <br/>
-                            Travelouge Age : {Math.floor(age())} days <br/>
-                            Following : {this.state.followings} Followers : {this.state.followers} <br/>
-                            PlacesVisited : {this.state.placesVisited} <br/>
-                            {followBtn}
+                        <div className="profileMid">
+                            <div className="profile-name" >Posts</div>
+                            <PostsDiv/>
                         </div>
-                    </div>
-                    <div className="profileMid">
-                        <div className="profile-name" >Posts</div>
-                        <PostsDiv/>
                     </div>
                 </div>
-            </div>
-        )
+            )
+        }else if(!this.state.userExsist){
+            return(
+                <h1 style={{textAlign : "center"}}>404 Not found</h1>
+            )
+        }
     }
 }
 

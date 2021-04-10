@@ -19,12 +19,17 @@
     color: white;
 }
 
-.postForm input {
+.postInput {
     height: 40px;
     background: transparent;
-    border-radius: 10px;
     font-size: 20px;
-    border-style: solid;
+    /* border-style: solid; */
+    border: none;
     color: white;
     text-align: center;
+}
+
+.postInput:focus {
+    border: none;
+    box-shadow: 0px 0px 10px #b2bdcd
 }

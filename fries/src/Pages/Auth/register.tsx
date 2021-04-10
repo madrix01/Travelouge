@@ -68,14 +68,14 @@ class Register extends React.Component<{}, NewUser> {
         <AppBarStyled />
         <div className="regTitle">Register</div>
         <form onSubmit={this.handleSubmit} className="regForm"> 
-          <input type="text" name="username" value={this.state.username} placeholder="username" onChange={this.handleChange} autoComplete="off" required /><br/>
-          <input type="text" name="email" placeholder="email" value={this.state.email} onChange={this.handleChange} autoComplete="off" required /><br/>
-          <input type="password" name="password" placeholder="password" value={this.state.password} onChange={this.handleChange} autoComplete="off" required /> <br/>
-          <input type="text" name="bio" placeholder="bio" value={this.state.bio} onChange={this.handleChange} autoComplete="off" /><br/>
+          <input type="text" name="username" value={this.state.username} placeholder="username" onChange={this.handleChange} autoComplete="off" className="regInput" required /><br/>
+          <input type="text" name="email" placeholder="email" value={this.state.email} onChange={this.handleChange} autoComplete="off" className="regInput" required /><br/>
+          <input type="password" name="password" placeholder="password" value={this.state.password} onChange={this.handleChange} autoComplete="off" className="regInput" required /> <br/>
+          <input type="text" name="bio" placeholder="bio" value={this.state.bio} onChange={this.handleChange} className="regInput" autoComplete="off" /><br/>
           <input type="file" onChange={(e) => {
             this.onFileChange(e.target.files)}
           } /><br/>
-          <Button type="submit" color="primary" variant="contained">Register</Button>
+          <Button type="submit" variant="contained" style={{backgroundColor : "#fd4d4d"}} >Register</Button>
         </form>
       </div>
     );

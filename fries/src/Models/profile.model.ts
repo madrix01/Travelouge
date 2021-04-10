@@ -6,6 +6,7 @@ interface PostProps {
 
 
 export interface ProfileModel {
+    userExsist : boolean
     email: string
     timeCreate : number
     followings: number

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { AppBar, makeStyles } from "@material-ui/core";
 import Cookies from 'js-cookie';
+import SearchBar from './searchBar'
 
 
 const useStyles = makeStyles({
@@ -14,7 +15,7 @@ const useStyles = makeStyles({
   },
   title: {
     width: "100%",
-    textAlign: "left",
+    // textAlign: "left",
     fontSize : "30px",
     marginLeft : "10px"
   },
@@ -45,9 +46,6 @@ const AppBarStyled = () => {
     )
   }
   const RouteVerify = () => {
-    const [loggedIn, setLoggedIn] = useState(Cookies.get().verified);
-    
-    console.log(Cookies.get().verified);
     
     if(Cookies.get().verified === '1'){
       return(
@@ -74,6 +72,7 @@ const AppBarStyled = () => {
         <div className={classes.title}>
           Travelouge
         </div>
+        <SearchBar />
         {RouteVerify()}
       </AppBar>
     </div>
