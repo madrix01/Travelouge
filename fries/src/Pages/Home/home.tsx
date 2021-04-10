@@ -35,7 +35,7 @@ class Home extends React.Component<{}, HomeState> {
 
     async getReadme(){
         // const readmePath = require("../../Assets/README.md");
-        await fetch('https://raw.githubusercontent.com/madrix01/Travelouge/main/fries/README.md?token=AMIIOX2JZI4F7MFZ6Y5EW5DAO3F66')
+        await fetch('https://raw.githubusercontent.com/madrix01/Travelouge/main/README.md?token=AMIIOX3I62GQBR4WFED7JNLAPLMRG')
             .then(response => {
                 return response.text();
             })
