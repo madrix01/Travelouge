@@ -14,8 +14,10 @@ interface ProfileParams {
 
 interface PostProps {
     title : string
-    description : string
-    imageURL : string    
+    // description : string
+    imageURL : string
+    postUrl : string
+    postId : string
 }
 
 interface ProfileProps extends RouteComponentProps<ProfileParams> {
@@ -25,7 +27,6 @@ interface ProfileProps extends RouteComponentProps<ProfileParams> {
 class Profile extends React.Component<ProfileProps & RouteProps, ProfileModel>{
     constructor(props : ProfileProps){
         super(props);
-
         this.state = {
             userExsist : false,
             email: "",
@@ -61,6 +62,7 @@ class Profile extends React.Component<ProfileProps & RouteProps, ProfileModel>{
     async getPosts() {
         const res = await fetch(`http://localhost:6969/api/post/${this.props.match.params.username}`, {headers : {authToken : Cookie.get().authToken}});
         const data = await res.json();
+        console.log(data);
         return data;
     }
 
@@ -110,17 +112,16 @@ class Profile extends React.Component<ProfileProps & RouteProps, ProfileModel>{
         }
 
         const PostsDiv =  () => {
-            // console.log(this.state.posts);
             if(this.state.posts.length > 0 ){
                 return(
                     <div className="pstMain">
-                        {this.state.posts.map((pst : PostProps, index) => (
-                            <div>
-                                {/* {console.log(pst.imageURL)} */}
+                        {this.state.posts.map((value : PostProps, index) => (
+                            <div key={index}>
                                 <PostCard 
-                                    title={pst.title}
-                                    imageURL={pst.imageURL}
-                                    description={pst.description}
+                                    title={value.title}
+                                    imageURL={value.imageURL}
+                                    postUrl={value.postUrl}
+                                    postId={value.postId}   
                                 />
                             </div>
                         ))}

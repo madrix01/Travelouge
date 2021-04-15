@@ -15,14 +15,16 @@ const useStyles = makeStyles({
   },
   title: {
     width: "100%",
-    // textAlign: "left",
+    textAlign: "left",
     fontSize : "30px",
     marginLeft : "10px"
   },
   links : {
     textAlign : "right",
     marginRight: "20px",
-    display: "flex"
+    display: "flex",
+    justifyContent : "space-between",
+    alignItems : "center"
   },
   link : {
     marginLeft: "5px",
@@ -50,10 +52,10 @@ const AppBarStyled = () => {
     if(Cookies.get().verified === '1'){
       return(
         <div className={classes.links}>
-          <RouteLink toLink='/home' name='Home'/>
-          <RouteLink toLink={`/u/${Cookies.get().username}`} name='Profile'/>
-          <RouteLink toLink="/post/add" name="Post" />
-          {/* <RouteLink toLink= "/logout"/> */}
+            <SearchBar />
+            <RouteLink toLink='/home' name='Home'/>
+            <RouteLink toLink={`/u/${Cookies.get().username}`} name='Profile'/>
+            <RouteLink toLink="/post/add" name="Post" />
         </div>
       )
     }else{
@@ -72,7 +74,6 @@ const AppBarStyled = () => {
         <div className={classes.title}>
           Travelouge
         </div>
-        <SearchBar />
         {RouteVerify()}
       </AppBar>
     </div>

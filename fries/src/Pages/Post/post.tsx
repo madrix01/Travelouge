@@ -4,6 +4,7 @@ import { Button } from "@material-ui/core";
 import './post.css'
 import Cookies from 'js-cookie'
 import AppBarStyled from '../../Components/AppBarStyled'
+import MapC from '../../Components/Map'
 
 class NewPost extends React.Component<{} , PostModel> {
     constructor(props : any){
@@ -13,12 +14,14 @@ class NewPost extends React.Component<{} , PostModel> {
             title : "",
             description: "",
             postPhoto : null,
+            latitude : 0,
+            longitude : 0
         }
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onFileChange = this.onFileChange.bind(this);
-
+        this.handleMapChange = this.handleMapChange.bind(this);
     }
 
     handleChange(e : React.FormEvent<HTMLInputElement>){
@@ -27,17 +30,21 @@ class NewPost extends React.Component<{} , PostModel> {
         const name : string = target.name;
         const n = name as keyof PostModel;
         this.setState({
-            [n] : value,
-        } as Pick<PostModel, keyof PostModel>)
+            [n]: value,
+        } as unknown as Pick<PostModel, keyof PostModel>)
     }
 
     handleSubmit(e : any){
+        console.log(this.state);
         const postReq = async () => {
             const formData = new FormData();
-
+            console.log(this.state);
+            
             formData.append('postImage', this.state.postPhoto);
             formData.append('title', this.state.title)
             formData.append('description', this.state.description)
+            formData.append('latitude', this.state.latitude.toString())
+            formData.append('longitude', this.state.longitude.toString())
             console.log(Cookies.get().authToken);
             
             const response = await fetch('http://localhost:6969/api/post', {
@@ -60,6 +67,12 @@ class NewPost extends React.Component<{} , PostModel> {
         this.setState({postPhoto : selectedFile[0]})
     }
 
+    handleMapChange(mpProps : any){
+        console.log(mpProps);
+        this.setState({latitude : mpProps.lat , longitude : mpProps.lng})
+        console.log(this.state);
+    }
+
     render(){
         return(
             <div className="post-main">
@@ -71,6 +84,7 @@ class NewPost extends React.Component<{} , PostModel> {
                     <input type="file" onChange={(e) => {
                         this.onFileChange(e.target.files)}
                     } /><br/>
+                    <MapC mapFunction={this.handleMapChange}/>
                 <Button type="submit"  variant="outlined" style={{backgroundColor : "#fd4d4d"}}>Post</Button>
                 </form>
             </div>

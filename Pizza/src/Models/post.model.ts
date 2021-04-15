@@ -1,3 +1,5 @@
+
+
 export interface Post {
     postId : string,
     timeCreate : number,
@@ -5,7 +7,9 @@ export interface Post {
     title : string,
     description : string,
     imageURL : string,
-    location : string,
+    latitude : number,
+    longitude : number,
     commentCount : number,
-    likesCount : number
+    likesCount : number,
+    postUrl : string
 }

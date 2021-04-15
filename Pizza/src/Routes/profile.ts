@@ -32,5 +32,22 @@ router.get('/u/:username',verify ,async (req, res) => {
     }
 })
 
+router.get('/search' ,async (req, res) => {
+    const snapShot = await userRef.where("username", "==", req.query.q).get().then(
+        async (data) => {
+            if(data.empty){
+                return res.json({"error" : "no user found"});
+            }
+            const temp = [];
+            data.forEach((doc) => {
+                temp.push(doc.data());
+            })
+
+            res.send(temp);
+        }
+    )
+    res.send(req.query.searchq);
+})
+
 
 export default router;

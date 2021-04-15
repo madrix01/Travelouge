@@ -1,20 +1,29 @@
 import React from 'react'
-import {Card} from '@material-ui/core'
+import {Card, ButtonBase} from '@material-ui/core'
 import './styles/PostCard.css'
+import {useHistory} from 'react-router-dom';
+
 
 const PostCard = (props: any) => {
+    const history = useHistory();
+
+    const btnOnClick = () => {
+        history.push(`/p/${props.postUrl}`, {
+            id : props.postId
+        })
+    }
+
     return(
-        <div>
-            <Card className="card-root" style={{backgroundColor: "#323d4d", borderRadius: "10px"}}>
+        <Card className="card-root" style={{backgroundColor: "#323d4d", borderRadius: "10px"}}>
+            <ButtonBase onClick={btnOnClick}>
+                <div className="card-root1">
                 <img src={props.imageURL} alt=""/>
                 <div className="card-title">
                     {props.title}
                 </div>
-                <div className="card-description">
-                    {props.description}
                 </div>
-            </Card>
-        </div>
+            </ButtonBase>
+        </Card>
     )
 }
 

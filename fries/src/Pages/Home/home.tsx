@@ -64,7 +64,6 @@ class Home extends React.Component<{}, HomeState> {
         Cookie.set('verified', '0', {path : '/'})
         console.log("Cookie reset");
         this.setState({verified : false});
-        // let history = useHistory();
     }
 
     redirectTo() {
@@ -83,6 +82,7 @@ class Home extends React.Component<{}, HomeState> {
                 <AppBarStyled/>
                 <h1>Hello, {this.state.name}</h1>
                 <button onClick={this.onLogout}>Logout</button>
+                <h1>⚠️ Feed under construction⚠️</h1>
                 <div className="homeMd">
                     <ReactMarkdown source={this.state.markdown} />
                 </div>

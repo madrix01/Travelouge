@@ -8,6 +8,7 @@ import Profile from './Pages/Profile/profile';
 import Register from './Pages/Auth/register';
 import NewPost from './Pages/Post/post';
 import mc from './Pages/Test/test'
+import PostInfo from './Pages/Post/postInfo'
 
 
 function Routers() {
@@ -20,6 +21,7 @@ function Routers() {
                 <Route path='/register' component={Register} />
                 <Route path='/post/add' component={NewPost} />
                 <Route path='/test' component={mc} />
+                <Route path='/p/:posttitle' component={PostInfo} />
             </Switch>
         </Router>
     )

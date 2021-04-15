@@ -2,6 +2,8 @@ interface PostProps {
     title : string
     description : string
     imageURL : string    
+    postUrl : string
+    postId : string
 }
 
 

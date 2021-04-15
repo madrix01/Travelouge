@@ -9,6 +9,7 @@ import {Post} from '@models/post.model';
 import {promisify} from 'util';
 import {GET_ASYNC, SET_ASYNC, DEL_ASYNC} from '@src/redisConnect'
 import imageUpload from '@utils/imageUpload';
+import strUrl from '@utils/urlString';
 const  unlinkAsync = promisify(fs.unlink);
 
 
@@ -48,7 +49,7 @@ router.post('/', [postMiddleware.userVerify ,postMiddleware.imageUpload] ,async 
 
     const body = req.body;
     const cdn_url = process.env.CDN_URL
-    
+
 
     const postBody : Post = {
         postId : uuid.v4(),
@@ -57,43 +58,38 @@ router.post('/', [postMiddleware.userVerify ,postMiddleware.imageUpload] ,async 
         title : body.title,
         description : body.description,
         imageURL : cdn_url + req.file.filename,
-        location : "XX",
+        latitude : Number(body.latitude),
+        longitude : Number(body.longitude),
         commentCount : 0,
         likesCount : 0,
+        postUrl : strUrl(body.title)
     }
     await imageUpload({filePath, filename, mimetype})
         .catch(err => console.log(err));
 
     // Clear cache
     await DEL_ASYNC(`mpost ${req.user.username}`)
-
     await postRef.doc(postBody.postId).set(postBody)
         .catch(err => res.send(err));
     res.json(postBody); 
 })
 
+
+
+// Get all post of a user
 router.get('/:username',verify , async (req, res) => {
     
     const cachedData = await GET_ASYNC(`mpost ${req.params.username}`)
     if(cachedData) {
-        console.log("Cached POsts");
         res.json(JSON.parse(cachedData))
         return;
     }
 
-    let uid;
-
-    // get user id;
-    // console.log("[Get user called]");
-    
+    let uid;    
     const cachedUser = await GET_ASYNC(`profile ${req.params.username}`)
     if(cachedUser){
-        console.log("[Cached]");
         uid = JSON.parse(cachedUser)
-        // console.log("[Cached]", uid);
-    }else if(!cachedData){
-        console.log("[Non cached]");
-        
+    }else if(!cachedData){        
         uid = await userRef.where("username", "==", req.params.username).get().then(async (data) => {
             if(data.empty){
                 return null; 
@@ -103,25 +99,19 @@ router.get('/:username',verify , async (req, res) => {
                 temp.push(doc.data());
             })
             await SET_ASYNC(`profile ${req.params.username}`, JSON.stringify(temp[0]), "EX", 1000);
-            console.log(`profile ${req.params.username}`);            
             return temp[0];
         })
     }
-    
-    console.log("[Yd]" ,uid);
     
     if(!uid) {
         return res.json({"error" : "1No posts"})
     }
 
     const userId = uid.id;
-    console.log("[User id]" ,userId);
     debugger;
     const snapShot = await postRef.where("userId", "==", userId).orderBy("timeCreate", "desc").get()
     
-    if(snapShot.empty){
-        console.log("Here");
-        
+    if(snapShot.empty){        
         res.json({"error" : "no posts yet"})
         return;
     }
@@ -131,11 +121,25 @@ router.get('/:username',verify , async (req, res) => {
         mfeed.push(dc);
     })
 
-    console.log("Mfeed length", mfeed.length);
-
     await SET_ASYNC(`mpost ${req.params.username}`, JSON.stringify(mfeed), "EX", 1000).catch(err => console.log(err))
     res.json(mfeed);
     return;
 })
+
+// Get specific post 
+
+router.get("/id/:postId", verify, async (req, res) => {
+    const cachedPost = await GET_ASYNC(req.params.postId);
+    if(cachedPost){
+        res.json(JSON.parse(cachedPost));
+    }
+
+    await postRef.doc(req.params.postId).get()
+        .then(async doc =>  {
+            await SET_ASYNC(req.params.postId, JSON.stringify(doc.data()), 'EX', 600);
+            res.send(doc.data());
+        })
+})
+
 
 export default router;  
