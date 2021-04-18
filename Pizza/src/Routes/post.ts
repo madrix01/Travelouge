@@ -18,7 +18,6 @@ const router = express.Router();
 const postRef = db.collection('posts')
 const userRef = db.collection('users');
 
-
 var storage = multer.diskStorage({
     destination : "./public/uploads",
     filename : (req, file, cb) => {
@@ -108,7 +107,6 @@ router.get('/:username',verify , async (req, res) => {
     }
 
     const userId = uid.id;
-    debugger;
     const snapShot = await postRef.where("userId", "==", userId).orderBy("timeCreate", "desc").get()
     
     if(snapShot.empty){        
@@ -129,16 +127,17 @@ router.get('/:username',verify , async (req, res) => {
 // Get specific post 
 
 router.get("/id/:postId", verify, async (req, res) => {
-    const cachedPost = await GET_ASYNC(req.params.postId);
+    const cachedPost = await GET_ASYNC(req.params.postId)
+    console.log(cachedPost);
     if(cachedPost){
         res.json(JSON.parse(cachedPost));
     }
 
-    await postRef.doc(req.params.postId).get()
-        .then(async doc =>  {
-            await SET_ASYNC(req.params.postId, JSON.stringify(doc.data()), 'EX', 600);
-            res.send(doc.data());
-        })
+    const pst = await postRef.doc(req.params.postId).get()
+    // await console.log(pst);
+    await SET_ASYNC(req.params.postId, JSON.stringify(pst.data()), 'EX', 600).then(
+        res.json(pst.data())
+    );
 })
 
 

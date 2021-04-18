@@ -1,7 +1,7 @@
 export interface PostModel {
+    postPhoto : any
     title : string
     description : string
-    postPhoto : any
     latitude : number
     longitude : number
 }

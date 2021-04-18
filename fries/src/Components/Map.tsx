@@ -1,5 +1,5 @@
 import React, {useState, useRef, useMemo, useCallback} from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from 'react-leaflet'
 import "./styles/map.css"
 import {LatLng, LatLngTuple} from 'leaflet';
 
@@ -13,6 +13,12 @@ interface MapProps {
 //   this.setState({latitude : coords.latitude, longitude : coords.longitude})
 // }
 
+
+function ChangeView({ center, zoom} : any) {
+  const map = useMap();
+  map.setView(center, zoom);
+  return null;
+}
 
 function DraggableMarker(props: any) {
 
@@ -81,4 +87,23 @@ function MapC (props : any) {
   )
 }
 
-export default MapC
+function MapStable(props : any){
+  const position : LatLngTuple = [props.latitude, props.longitude]
+  return(
+    <MapContainer center={position} zoom={13} scrollWheelZoom={true} id="map">
+      <ChangeView center={position} zoom={13} />
+    <TileLayer
+      attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+    />
+    <Marker position={position}>
+      <Popup>
+        A pretty CSS3 popup. <br /> Easily customizable.
+      </Popup>
+    </Marker>
+    </MapContainer>
+  )
+}
+
+
+export {MapC, MapStable}

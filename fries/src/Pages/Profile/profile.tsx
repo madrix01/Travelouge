@@ -122,6 +122,7 @@ class Profile extends React.Component<ProfileProps & RouteProps, ProfileModel>{
                                     imageURL={value.imageURL}
                                     postUrl={value.postUrl}
                                     postId={value.postId}   
+                                    username={this.props.match.params.username}
                                 />
                             </div>
                         ))}

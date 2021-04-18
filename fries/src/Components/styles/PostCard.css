@@ -10,11 +10,11 @@
 }
 
 .card-title{
-    font-size: 30px;
+    font-size: 25px;
     font-weight: 500;
     color: white;
     text-align: center;
-    margin: 10px;
+    margin: 5px;
 }
 
 .card-description{
@@ -25,12 +25,9 @@
 }
 
 .card-root img{
-    height: 200px;
-    width: 200px;
+    height: 250px;
+    width: 250px;
     object-fit: cover;
     display: block;
-    margin-top: 10px;
-    margin-left: auto;
-    margin-right: auto;
     border-radius: 10px;
 }

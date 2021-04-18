@@ -21,7 +21,7 @@ function Routers() {
                 <Route path='/register' component={Register} />
                 <Route path='/post/add' component={NewPost} />
                 <Route path='/test' component={mc} />
-                <Route path='/p/:posttitle' component={PostInfo} />
+                <Route path='/p/:username/:posttitle' component={PostInfo} />
             </Switch>
         </Router>
     )

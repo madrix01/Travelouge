@@ -4,7 +4,7 @@ import { Button } from "@material-ui/core";
 import './post.css'
 import Cookies from 'js-cookie'
 import AppBarStyled from '../../Components/AppBarStyled'
-import MapC from '../../Components/Map'
+import {MapC} from '../../Components/Map'
 
 class NewPost extends React.Component<{} , PostModel> {
     constructor(props : any){
@@ -83,7 +83,7 @@ class NewPost extends React.Component<{} , PostModel> {
                     <input type="text" name="description" value={this.state.description} placeholder="description" onChange={this.handleChange} className="postInput" autoComplete="off" /><br/>
                     <input type="file" onChange={(e) => {
                         this.onFileChange(e.target.files)}
-                    } /><br/>
+                    } />    <br/>
                     <MapC mapFunction={this.handleMapChange}/>
                 <Button type="submit"  variant="outlined" style={{backgroundColor : "#fd4d4d"}}>Post</Button>
                 </form>

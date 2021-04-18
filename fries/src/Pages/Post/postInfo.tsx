@@ -3,16 +3,29 @@ import AppBarStyled from "../../Components/AppBarStyled";
 import './postInfo.css'
 import {PostModel} from '../../Models/post.model'
 import {url} from "../../constant"
-// interface PostInfoModel extends PostModel{
-//   timecreated : number
-// }
+import { RouteComponentProps, RouteProps } from "react-router";
+import Cookie from 'js-cookie';
+import {MapStable} from '../../Components/Map'
 
 
 interface PostIdProps{
-  postId : string 
+  id : string 
 }
 
-export default class PostInfo extends React.Component<PostIdProps, {}> {
+interface PostInfoState{
+  title : string
+  description : string
+  latitude : number
+  longitude : number
+  timeCreate : number  
+  imageURL : string
+}
+
+interface PostIdParams extends RouteComponentProps<PostIdProps>{
+
+}
+
+export default class PostInfo extends React.Component<PostIdParams & RouteProps, PostInfoState> {
 
   constructor(props : any){
     super(props);
@@ -20,7 +33,7 @@ export default class PostInfo extends React.Component<PostIdProps, {}> {
     this.state = {
       title : "",
       description : "",
-      timecreate : 0,
+      timeCreate : 0,
       latitude : 0,
       longitude : 0,
       imageURL : '',
@@ -30,20 +43,36 @@ export default class PostInfo extends React.Component<PostIdProps, {}> {
   }
 
   async getPost(){
-    const response = await fetch(url + `id/${this.props.postId}`)
+    const pid :any = this.props.location.state;
+    const response = await fetch(url + `post/id/${pid.id}`, {headers : {authToken : Cookie.get().authToken}})
+    if(response.status === 200){
+      return response.json();
+    }
+  }
+
+  async componentDidMount(){
+    // const x: any = this.props.location.state;
+    const data = await this.getPost();
+    this.setState(data);
+    console.log(this.state);
+    
   }
   
   render() {
-    // console.log(this.props.location.state.postId);
-    const pid = this.props;
-    console.log();
-    
+
+    var postDate : any = new Date(this.state.timeCreate);
+    postDate = postDate.toDateString();
+
+
     return (
       <>
         <AppBarStyled />
         <div className="postInfoMain">
-          <div className="postTitle"></div>
+          <div className="postInfoTitle">{this.state.title}</div>
+          <div className="postDescription">{this.state.description}</div>
+          <div className="postTime">{postDate}</div>
         </div>
+          <MapStable latitude={this.state.latitude} longitude={this.state.longitude} />
       </>
     );
   }

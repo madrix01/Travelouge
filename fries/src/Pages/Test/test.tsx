@@ -1,6 +1,6 @@
 import React from "react";
 import SearchBar from '../../Components/searchBar'
-// import MapC from '../../Components/Map'
+import {MapC, MapStable} from '../../Components/Map'
 
 // const mc = () => {
 //     return (
@@ -14,7 +14,7 @@ import SearchBar from '../../Components/searchBar'
 const mc = () => {
     return (
         <div>
-            <SearchBar />
+            <MapStable longitude={69} latitude={69} />
         </div>
     ) 
 }

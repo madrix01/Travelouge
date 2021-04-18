@@ -1,0 +1,23 @@
+.postInfoMain{
+    background: #242c37;
+    margin: 10px;
+    border-radius: 5px;
+}
+
+.postInfoTitle{
+    font-size: 50px;
+    font-weight: bold;
+    margin: 10px;
+}
+
+.postDescription{
+    font-size: 40px;
+    color: #979797;
+    margin: 10px;
+}
+
+.postTime{
+    margin: 10px;
+    font-size: 25px;
+    color: #979797
+}

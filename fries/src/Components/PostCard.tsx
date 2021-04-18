@@ -8,11 +8,10 @@ const PostCard = (props: any) => {
     const history = useHistory();
 
     const btnOnClick = () => {
-        history.push(`/p/${props.postUrl}`, {
+        history.push(`/p/${props.username}/${props.postUrl}`, {
             id : props.postId
         })
     }
-
     return(
         <Card className="card-root" style={{backgroundColor: "#323d4d", borderRadius: "10px"}}>
             <ButtonBase onClick={btnOnClick}>
