@@ -1,14 +1,15 @@
-import { Button } from "@material-ui/core";
 import React from "react";
+import { Button } from "@material-ui/core";
 import { NewUser } from "../../Models/profile.model";
 import './register.css'
-import AppBarStyled from '../../Components/AppBarStyled'
+import AppBarStyled from "../../Components/AppBarStyled"
+import {url} from '../../constant';
 
 class Register extends React.Component<{}, NewUser> {
   constructor(props: any) {
     super(props);
 
-    this.state = {
+    this.state = {  
       username: "",
       password: "",
       email: "",
@@ -42,7 +43,7 @@ class Register extends React.Component<{}, NewUser> {
       formData.append('email', this.state.email);
       console.log(formData.values);
       
-      const response = await fetch('http://localhost:6969/api/user/register', {
+      const response = await fetch(`${url}/user/register`, {
         method : "POST",
         body : formData,
       })

@@ -9,7 +9,6 @@ function App() {
     <div className="AppMain">
       <Router>
         <div className="App">
-          {/* <AppBarStyled/> */}
           <Routers />
         </div>
       </Router>

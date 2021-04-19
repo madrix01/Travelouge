@@ -34,16 +34,7 @@ class SearchBar extends React.Component<{}, Search> {
 
 
     async handleSubmit(e: any){
-        // const resp = await fetch(`http://localhost:6969/test/search?q=${this.state.searchBody}`, {
-        //     method : "GET",
-        //     headers : {
-        //         "authToken" : Cookie.get().authToken 
-        //     }
-        // })
-        // const data = await resp.json();
-
         console.log('Here');
-        // window.location.href =  `/u/${this.state.searchBody}`
         window.location.replace(`/u/${this.state.searchBody}`)
         e.preventDefault();
     }

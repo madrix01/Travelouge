@@ -5,6 +5,7 @@ import './post.css'
 import Cookies from 'js-cookie'
 import AppBarStyled from '../../Components/AppBarStyled'
 import {MapC} from '../../Components/Map'
+import {url} from '../../constant';
 
 class NewPost extends React.Component<{} , PostModel> {
     constructor(props : any){
@@ -47,7 +48,7 @@ class NewPost extends React.Component<{} , PostModel> {
             formData.append('longitude', this.state.longitude.toString())
             console.log(Cookies.get().authToken);
             
-            const response = await fetch('http://localhost:6969/api/post', {
+            const response = await fetch(url + '/post', {
                 method : "POST",
                 body : formData,
                 headers : {

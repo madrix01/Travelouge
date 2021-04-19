@@ -4,6 +4,7 @@ import { Redirect, useHistory} from 'react-router-dom';
 import AppBarStyled from '../../Components/AppBarStyled'
 import ReactMarkdown from 'react-markdown';
 import './home.css'
+import {url} from '../../constant';
 
 interface HomeState{
     name : string
@@ -27,7 +28,7 @@ class Home extends React.Component<{}, HomeState> {
     }
 
     async getUser() {
-        const res = await fetch('http://localhost:6969/api/home', {headers : {authToken : Cookie.get().authToken}});
+        const res = await fetch(`${url}/api/home`, {headers : {authToken : Cookie.get().authToken}});
         const data = await res.json();
         console.log(data);
         return data;

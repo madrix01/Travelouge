@@ -7,6 +7,7 @@ import PostCard from '../../Components/PostCard'
 import AppBarStyled from '../../Components/AppBarStyled'
 import {Button} from '@material-ui/core'
 import axios from 'axios';
+import {url} from '../../constant';
 
 interface ProfileParams {
     username : string
@@ -47,7 +48,7 @@ class Profile extends React.Component<ProfileProps & RouteProps, ProfileModel>{
     }
 
     async getUser() {
-        const response = await axios.get(`http://localhost:6969/api/u/${this.props.match.params.username}`, {
+        const response = await axios.get(`${url}/u/${this.props.match.params.username}`, {
             headers : {authToken : Cookie.get().authToken}
         })
         if(response.status === 200){
@@ -60,14 +61,14 @@ class Profile extends React.Component<ProfileProps & RouteProps, ProfileModel>{
     }
 
     async getPosts() {
-        const res = await fetch(`http://localhost:6969/api/post/${this.props.match.params.username}`, {headers : {authToken : Cookie.get().authToken}});
+        const res = await fetch(`${url}/post/${this.props.match.params.username}`, {headers : {authToken : Cookie.get().authToken}});
         const data = await res.json();
         console.log(data);
         return data;
     }
 
     async follow() {
-        const res = await fetch(`http://localhost:6969/api/follow/${this.state.id}`, {
+        const res = await fetch(`${url}/follow/${this.state.id}`, {
             method : "GET",
             headers : {
                 "authToken" : Cookie.get().authToken

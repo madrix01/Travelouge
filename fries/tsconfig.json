@@ -6,9 +6,8 @@
       "dom.iterable",
       "esnext"
     ],
-    "typeRoots" : [
-      "node_modules/@types",
-      "google.maps"
+    "typeRoots": [
+      "node_modules/@types"
     ],
     "allowJs": true,
     "skipLibCheck": true,
@@ -22,7 +21,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "baseUrl": "."
   },
   "include": [
     "src"

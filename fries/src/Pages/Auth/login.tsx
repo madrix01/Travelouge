@@ -4,6 +4,7 @@ import './login.css'
 import { Redirect } from "react-router";
 import {Button} from '@material-ui/core';
 import AppBarStyled from '../../Components/AppBarStyled'
+import {url} from '../../constant';
 
 interface LoginState {
   username : string,
@@ -53,7 +54,7 @@ class Login extends React.Component<{}, LoginState> {
         password : this.state.password,
       }
 
-      const response = await fetch("http://localhost:6969/api/user/login", {
+      const response = await fetch(`${url}/user/login`, {
         method : 'POST',
         credentials : "same-origin",
         headers : {
