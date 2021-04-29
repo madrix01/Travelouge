@@ -16,13 +16,15 @@ class NewPost extends React.Component<{} , PostModel> {
             description: "",
             postPhoto : null,
             latitude : 0,
-            longitude : 0
+            longitude : 0,
+            imgSrc : null,
         }
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onFileChange = this.onFileChange.bind(this);
         this.handleMapChange = this.handleMapChange.bind(this);
+        this.preview = this.preview.bind(this);
     }
 
     handleChange(e : React.FormEvent<HTMLInputElement>){
@@ -66,6 +68,15 @@ class NewPost extends React.Component<{} , PostModel> {
     }
     onFileChange(selectedFile : any){
         this.setState({postPhoto : selectedFile[0]})
+        var reader = new FileReader();
+        var imgUrl = reader.readAsDataURL(selectedFile[0]);
+
+        reader.onloadend = (e) => {
+            this.setState({
+                imgSrc : [reader.result]
+            })
+        }
+        console.log(imgUrl);
     }
 
     handleMapChange(mpProps : any){
@@ -74,19 +85,34 @@ class NewPost extends React.Component<{} , PostModel> {
         console.log(this.state);
     }
 
+    preview(){
+        if(this.state.imgSrc !== null){
+            return(
+                <img src={this.state.imgSrc} alt="Upload Image to see preview" className="postImg" />
+            )
+        }
+    }
+
     render(){
+        console.log(this.state.postPhoto);
         return(
             <div className="post-main">
                 <AppBarStyled/>
                 <div className="postTitle">New Post</div>
                 <form onSubmit={this.handleSubmit} className="postForm">
-                    <input type="text" name="title" value={this.state.title} placeholder="title" onChange={this.handleChange} className="postInput" autoComplete="off" /><br/>
-                    <input type="text" name="description" value={this.state.description} placeholder="description" onChange={this.handleChange} className="postInput" autoComplete="off" /><br/>
-                    <input type="file" onChange={(e) => {
-                        this.onFileChange(e.target.files)}
-                    } />    <br/>
-                    <MapC mapFunction={this.handleMapChange}/>
-                <Button type="submit"  variant="outlined" style={{backgroundColor : "#fd4d4d"}}>Post</Button>
+                    <div className="formInp1">
+                        <input type="text" name="title" value={this.state.title} placeholder="title" onChange={this.handleChange} className="postInput" autoComplete="off" /><br/>
+                        <input type="text" name="description" value={this.state.description} placeholder="description" onChange={this.handleChange} className="postInput" autoComplete="off" /><br/>
+                        <input type="file" onChange={(e) => {
+                            this.onFileChange(e.target.files)}
+                        } /><br/>
+                        {/* <img src={this.state.imgSrc} alt="Upload Image to see preview" className="postImg" /> */}
+                        <Button type="submit"  variant="outlined" style={{backgroundColor : "#fd4d4d"}}>Post</Button>
+                        {this.preview()}
+                    </div>
+                    <div className="formInp2">
+                        <MapC mapFunction={this.handleMapChange}/>
+                    </div>
                 </form>
             </div>
         )

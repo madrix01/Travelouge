@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { AppBar, makeStyles } from "@material-ui/core";
+import { AppBar, colors, makeStyles } from "@material-ui/core";
 import Cookies from 'js-cookie';
 import SearchBar from './searchBar'
 
@@ -53,9 +53,9 @@ const AppBarStyled = () => {
       return(
         <div className={classes.links}>
             <SearchBar />
-            <RouteLink toLink='/home' name='Home'/>
-            <RouteLink toLink={`/u/${Cookies.get().username}`} name='Profile'/>
-            <RouteLink toLink="/post/add" name="Post" />
+            {/* <RouteLink toLink='/home' name='Home'/> */}
+            {/* <RouteLink toLink={`/u/${Cookies.get().username}`} name='Profile'/> */}
+            {/* <RouteLink toLink="/post/add" name="Post" /> */}
         </div>
       )
     }else{
@@ -72,7 +72,7 @@ const AppBarStyled = () => {
     <div style={{ paddingBottom: "10vh" }}>
       <AppBar className={classes.root} elevation={0} >
         <div className={classes.title}>
-          Travelouge
+         <a href="/home" style={{textDecoration: "none",color: "white"}}> Travelouge</a>
         </div>
         {RouteVerify()}
       </AppBar>

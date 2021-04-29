@@ -1,16 +1,22 @@
 .searchInput {
-    height: 40px;
-    background: transparent;
+    height: 30px;
+    background: #242C37;
     font-size: 20px;
     /* border-style: solid; */
     border: none;
     color: white;
-    text-align: center;
+    /* text-align: center; */
     border-radius: 5px;
+    padding-left: 15px;
 }
 
 .searchMain {
     display: flex;
     /* justify-content: center;
     align-items: center; */
+}
+
+.searchInput:focus {
+    outline: none;
+    border: none;
 }

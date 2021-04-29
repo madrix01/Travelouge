@@ -9,5 +9,35 @@
     border: none;
     padding: 10px;
     border-radius: 20px;
-    background: #242c37;
+    background: #151a21;
+}
+
+.feedMain{
+    display: flex;
+}
+
+.feedLeft{
+    flex: 1;
+    /* background: pink; */
+    width: 100%;
+    height: 100%;
+}
+
+.feedMid{
+    flex: 2;
+    width: 100%;
+    height: 100vh;
+}
+
+.feedRight{
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    margin: 10px;
+    /* background: red; */
+}
+
+.feedMidMain{
+    height: 100%;
+    overflow: scroll;
 }

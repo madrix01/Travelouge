@@ -128,16 +128,15 @@ router.get('/:username',verify , async (req, res) => {
 
 router.get("/id/:postId", verify, async (req, res) => {
     const cachedPost = await GET_ASYNC(req.params.postId)
-    console.log(cachedPost);
+    // console.log(cachedPost);
     if(cachedPost){
         res.json(JSON.parse(cachedPost));
+    }else if(!cachedPost){
+        const pst = await postRef.doc(req.params.postId).get()
+        await SET_ASYNC(req.params.postId, JSON.stringify(pst.data()), 'EX', 600).then(
+            res.json(pst.data())
+        );
     }
-
-    const pst = await postRef.doc(req.params.postId).get()
-    // await console.log(pst);
-    await SET_ASYNC(req.params.postId, JSON.stringify(pst.data()), 'EX', 600).then(
-        res.json(pst.data())
-    );
 })
 
 

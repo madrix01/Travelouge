@@ -44,7 +44,7 @@ export default class PostInfo extends React.Component<PostIdParams & RouteProps,
 
   async getPost(){
     const pid :any = this.props.location.state;
-    const response = await fetch(url + `post/id/${pid.id}`, {headers : {authToken : Cookie.get().authToken}})
+    const response = await fetch(url + `/post/id/${pid.id}`, {headers : {authToken : Cookie.get().authToken}})
     if(response.status === 200){
       return response.json();
     }

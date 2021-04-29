@@ -1,6 +1,6 @@
 .post-main {
     text-align: center;
-    display: flex;
+    /* display: flex; */
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -13,23 +13,51 @@
 }
 
 .postForm {
-    margin-top: 100px;
+    margin-top: 10px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-around;
+    /* align-items: ; */
     color: white;
 }
 
 .postInput {
     height: 40px;
-    background: transparent;
+    background: #242C37;
     font-size: 20px;
     /* border-style: solid; */
     border: none;
+    border-radius: 5px;
     color: white;
-    text-align: center;
+    text-align: left;
+    padding-left: 10px;
+    margin: 10px;
 }
 
 .postInput:focus {
+    outline: none;
     border: none;
-    box-shadow: 0px 0px 10px #b2bdcd
+    /* box-shadow: 0px 0px 10px #b2bdcd */
+}
+
+.postImg{
+    margin-top: 5px;
+    height: 250px;
+    width: 250px;
+    object-fit: cover;
+    display: block;
+    border-radius: 10px;
+    margin: auto;
+}
+
+.formInp1{
+    flex: 1;
+    width: 100%;
+}
+
+.formInp2{
+    display: flex;
+    justify-content: center;
+    flex: 1;
+    width: 100%;
 }

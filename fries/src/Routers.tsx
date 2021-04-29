@@ -10,11 +10,16 @@ import NewPost from './Pages/Post/post';
 import mc from './Pages/Test/test'
 import PostInfo from './Pages/Post/postInfo'
 
+const SlashRoute = () => {
+    return Cookies.get().verified === '1' ?  (<Redirect to="/home" />) : (<Redirect to="/login" />)
+    // return (<Redirect to="/"/>)
+}
 
 function Routers() {
     return(
         <Router>
             <Switch>
+                <Route path="/" exact component={SlashRoute}/>
                 <Route path='/login' exact component={Login} /> 
                 <ProtectedRoute path='/home' exact component={Home} />
                 <Route path='/u/:username' component={Profile} />
@@ -39,8 +44,9 @@ const ProtectedRoute = ({component : Component, ...rest} : Props) => {
                 Cookies.get().verified === '1' ? (<Component />)
                     : (<Redirect to='/login'/>)
             }
-        / >
+        />
     )
 }
+
 
 export default Routers;

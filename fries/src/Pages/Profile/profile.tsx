@@ -97,7 +97,6 @@ class Profile extends React.Component<ProfileProps & RouteProps, ProfileModel>{
         if(posts) {
             this.setState({posts : posts})
         }
-        // console.log(this.state);
     }
 
 
@@ -143,6 +142,12 @@ class Profile extends React.Component<ProfileProps & RouteProps, ProfileModel>{
                 <div>
                     <Button variant="contained" color="primary" style={{margin: "5px"}} onClick={this.follow}>Follow</Button>
                     <Button variant="contained" color="secondary" style={{margin: "5px"}}>Unfollow</Button>
+                </div>
+            )
+        }else{
+            followBtn = (
+                <div>
+                    <a href="/post/add"><Button variant="contained" style={{backgroundColor : "#fd4d4d"}}>Add New Post</Button></a>
                 </div>
             )
         }

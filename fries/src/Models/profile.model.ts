@@ -8,7 +8,7 @@ interface PostProps {
 
 
 export interface ProfileModel {
-    userExsist : boolean
+    userExsist? : boolean
     email: string
     timeCreate : number
     followings: number
@@ -19,7 +19,7 @@ export interface ProfileModel {
     followers: number,
     profilePhotoUrl : string
     posts : PostProps[]
-    isSameAsUser : boolean
+    isSameAsUser? : boolean
 }
 
 export interface NewUser{

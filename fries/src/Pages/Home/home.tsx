@@ -5,9 +5,10 @@ import AppBarStyled from '../../Components/AppBarStyled'
 import ReactMarkdown from 'react-markdown';
 import './home.css'
 import {url} from '../../constant';
+import {ProfileModel} from '../../Models/profile.model' 
+import ProfileCard from '../../Components/profileCard'
 
-interface HomeState{
-    name : string
+interface HomeState extends ProfileModel{
     verified : boolean
     markdown : string
 }
@@ -17,9 +18,18 @@ class Home extends React.Component<{}, HomeState> {
         super(props);
 
         this.state = {
-            name : "loading",
             verified : true,
-            markdown : ""
+            markdown : "",
+            email : "",
+            timeCreate: 0,
+            followings : 0,
+            followers : 0,
+            username : "",
+            id : "",
+            bio : "",
+            placesVisited : 0,
+            profilePhotoUrl : "",
+            posts : []
         }
 
         this.getUser = this.getUser.bind(this);
@@ -28,7 +38,7 @@ class Home extends React.Component<{}, HomeState> {
     }
 
     async getUser() {
-        const res = await fetch(`${url}/api/home`, {headers : {authToken : Cookie.get().authToken}});
+        const res = await fetch(`${url}/u/${Cookie.get().username}`, {headers : {authToken : Cookie.get().authToken}});
         const data = await res.json();
         console.log(data);
         return data;
@@ -54,7 +64,8 @@ class Home extends React.Component<{}, HomeState> {
         await this.getReadme();
         const luser= await this.getUser();
         if(luser){
-            this.setState({name : luser.username, verified: true});
+            this.setState(luser);
+            this.setState({verified : true})
         }else{
             this.setState({verified : false});
         }
@@ -81,13 +92,31 @@ class Home extends React.Component<{}, HomeState> {
         return(
             <div className="homeMain">
                 <AppBarStyled/>
-                <h1>Hello, {this.state.name}</h1>
-                <button onClick={this.onLogout}>Logout</button>
-                <h1>⚠️ Feed under construction⚠️</h1>
-                <div className="homeMd">
-                    <ReactMarkdown source={this.state.markdown} />
+                <div className="feedMain">
+                    <div className="feedLeft">
+                        Hello Left
+                    </div>
+                    <div className="feedMid">
+                        <div className="feedMidMain">
+                            <h1>Hello, {Cookie.get().username}</h1>
+                            <button onClick={this.onLogout}>Logout</button>
+                            <h1>⚠️ Feed under construction⚠️</h1>
+                            <div className="homeMd">
+                                <ReactMarkdown source={this.state.markdown} />
+                            </div>
+                            {this.redirectTo()}
+                        </div>
+                    </div>
+                    <div className="feedRight">
+                        <ProfileCard
+                            imgSrc={this.state.profilePhotoUrl}
+                            username={this.state.username}
+                            followers={this.state.followers}
+                            followings={this.state.followings}
+                            bio={this.state.bio}
+                        />
+                    </div>
                 </div>
-                {this.redirectTo()}
             </div>
         )   
     }

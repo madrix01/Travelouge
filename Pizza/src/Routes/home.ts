@@ -7,4 +7,4 @@ router.get('/', verify, async (req, res) => {
     res.json(req.user);
 })
 
-export default router;
+export default router;  

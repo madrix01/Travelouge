@@ -4,4 +4,5 @@ export interface PostModel {
     description : string
     latitude : number
     longitude : number
+    imgSrc : any
 }
