@@ -42,6 +42,6 @@ app.get('/', (req, res) => {
     res.send("Hello")
 })
 
-app.listen(6969, () => {
+app.listen(process.env.PORT, () => {
     console.log("🚀 running on 6969");
 })
