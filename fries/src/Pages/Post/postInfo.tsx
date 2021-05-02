@@ -7,7 +7,6 @@ import { RouteComponentProps, RouteProps } from "react-router";
 import Cookie from 'js-cookie';
 import {MapStable} from '../../Components/Map'
 
-
 interface PostIdProps{
   id : string 
 }
@@ -68,11 +67,14 @@ export default class PostInfo extends React.Component<PostIdParams & RouteProps,
       <>
         <AppBarStyled />
         <div className="postInfoMain">
-          <div className="postInfoTitle">{this.state.title}</div>
-          <div className="postDescription">{this.state.description}</div>
-          <div className="postTime">{postDate}</div>
+          <div className="postInfoSub">
+            <div className="postInfoTitle">{this.state.title}</div>
+            <div className="postDescription">{this.state.description}</div>
+            <div className="postTime">{postDate}</div>
+          </div>
+            <img src={this.state.imageURL} className="postImage" />
+            {/* <MapStable latitude={this.state.latitude} longitude={this.state.longitude}/> */}
         </div>
-          <MapStable latitude={this.state.latitude} longitude={this.state.longitude} />
       </>
     );
   }

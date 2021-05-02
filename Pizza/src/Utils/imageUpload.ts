@@ -41,4 +41,5 @@ const imageUpload = async ({filePath, filename, mimetype})  => {
     // await unlinkAsync(optimizedFilePath).catch(err=> console.log(err));
 }
 
+
 export default imageUpload;

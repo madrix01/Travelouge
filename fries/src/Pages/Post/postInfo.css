@@ -2,6 +2,8 @@
     background: #242c37;
     margin: 10px;
     border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
 }
 
 .postInfoTitle{
@@ -20,4 +22,17 @@
     margin: 10px;
     font-size: 25px;
     color: #979797
+}
+
+.postImage{
+    margin: 20px;
+    height: 400px;
+    width: 400px;
+    object-fit: cover;
+    display: block;
+    border-radius: 10px;
+}
+
+
+.postInfoSub {
 }

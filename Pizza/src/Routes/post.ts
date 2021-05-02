@@ -10,6 +10,7 @@ import {promisify} from 'util';
 import {GET_ASYNC, SET_ASYNC, DEL_ASYNC} from '@src/redisConnect'
 import imageUpload from '@utils/imageUpload';
 import strUrl from '@utils/urlString';
+import imageDelete from '@utils/imageDelete'
 const  unlinkAsync = promisify(fs.unlink);
 
 
@@ -136,6 +137,23 @@ router.get("/id/:postId", verify, async (req, res) => {
         await SET_ASYNC(req.params.postId, JSON.stringify(pst.data()), 'EX', 600).then(
             res.json(pst.data())
         );
+    }
+})
+
+
+router.get("/del/:postId", verify, async (req,res) => {
+    
+    const postData = await (await postRef.doc(req.params.postId).get()).data();
+
+    if(postData.userId === req.user.id){
+        await postRef.doc(req.params.postId).delete();
+        await imageDelete(req.params.postId);
+        await DEL_ASYNC(`mpost ${req.user.username}`);
+        res.json({"deleted" : req.params.postId});
+        return;
+    }else{
+        res.status(400).json({"deleted" : "error encountered"})
+        return;
     }
 })
 
