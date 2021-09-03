@@ -9,6 +9,7 @@ import {LoginUser, NewUser} from '@models/user.model'
 import imageUpload from '@utils/imageUpload'
 
 
+
 const router = express.Router();
 
 const userRef = db.collection('users');    
@@ -93,43 +94,26 @@ router.post('/login', async (req, res) => {
     const body : LoginUser = req.body;
 
     const userExsist = await userRef.where("username", "==", body.username).get();
-
     if(userExsist.empty){
         res.status(400).json({'error' : "wrong username or password"});
     }else{
-        console.log(userExsist.size);
-        const doc = await userExsist[0];
-        const validPass : boolean = await bycrypt.compare(body.password, doc.data().password);
-        if(!validPass){
-            res.json({"error" : "wrong username or password"});
-        }else{
+        userExsist.forEach(async (doc) => {
+            const validPass : boolean = await bycrypt.compare(body.password, doc.data().password);
+            if(!validPass){
+                res.json({'error' : "wrong username or password"});
+                return;
+            }
+
             const tokenData = doc.data();
             tokenData.password = undefined;
             const token = jwt.sign(
-                tokenData,
-                process.env.TOKEN_SECRET, {expiresIn: '1d'});
+                tokenData
+            , process.env.TOKEN_SECRET, {expiresIn: '1d'});
             
             res.cookie('authToken', token, {httpOnly : true});
             res.status(200).json({authToken : token});
-        }
-
-        // userExsist.forEach(async (doc) => {
-        //     const validPass : boolean = await bycrypt.compare(body.password, doc.data().password);
-        //     if(!validPass){
-        //         res.json({'error' : "wrong username or password"});
-        //         return;
-        //     }
-
-        //     const tokenData = doc.data();
-        //     tokenData.password = undefined;
-        //     const token = jwt.sign(
-        //         tokenData
-        //     , process.env.TOKEN_SECRET, {expiresIn: '1d'});
-            
-        //     res.cookie('authToken', token, {httpOnly : true});
-        //     res.status(200).json({authToken : token});
-        //     return;
-        // })
+            return;
+        })
     }
 })
 

@@ -32,7 +32,7 @@ make Pizza
 ```
 - Start firestore emulator
 ```
-make run-emulators
+
 ```
 - start redis for backend
 - start the backend development
