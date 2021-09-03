@@ -46,9 +46,9 @@
     ]
   },
   "browserslist": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
   ],
   "devDependencies": {
     "@types/cookie-parser": "^1.4.2",
