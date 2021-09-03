@@ -6,7 +6,6 @@ import * as dotenv from 'dotenv';
 import * as cookieParser from 'cookie-parser';
 
 
-
 dotenv.config();
 
 // Routes

@@ -6,7 +6,7 @@ import * as multer from 'multer';
 import * as uuid from 'uuid';
 import * as aquarelle from 'aquarelle'
 import verify from '@src/verifyToken';
-
+import * as cloudinary from 'cloudinary';
 
 const userRef = db.collection('users')
 
@@ -29,8 +29,11 @@ router.get('/search' ,async (req, res) => {
 
 router.get("/up",async (req, res) => {
     const x = await aquarelle(128, 128, 'public/uploads').then(console.log("Uploaded"))
-      res.send(`${x.filePath} ${x.fileName}`)
+    res.send(`${x.filePath} ${x.fileName}`)
 })
 
+router.get("/", async (req, res) => {
+    res.send("mike testing");
+})
 
 export default router;

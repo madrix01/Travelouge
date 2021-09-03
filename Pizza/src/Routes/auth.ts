@@ -5,14 +5,16 @@ import * as uuid from 'uuid';
 import * as multer from 'multer';
 import * as aquarelle from 'aquarelle';
 import db from '../initFirebase';
-import {LoginUser, NewUser, TokenUser} from '@models/user.model'
+import {LoginUser, NewUser} from '@models/user.model'
 import imageUpload from '@utils/imageUpload'
+
+
 const router = express.Router();
 
 const userRef = db.collection('users');    
 
-var storage = multer.diskStorage({
-    destination : "./public/uploads",
+const storage = multer.diskStorage({
+    destination : (process.env.PRODUCTION === "true"? "./public/uploads" : "../fries/src/cloudLocal/userProfile"),
     filename : (req, file, cb) => {
         cb(null, uuid.v4() + '.' + file.originalname.split('.').pop());
     }
@@ -28,15 +30,15 @@ router.get('/register', async (req, res) => {
 })
 
 router.post('/register', postMiddleware.imgUpload ,async (req, res) => {
-    console.log('Request Recieved');
 
+    const dpUploadPath = process.env.PRODUCTION === "true" ? "public/uploads" : "/fries/src/cloudLocal/userProfile"
 
     if(!req.file){
         console.info("No image found");
     }
 
     const body : NewUser = req.body;
-    const cdn_url = process.env.CDN_URL;
+    const cdn_url = process.env.PRODUCTION === 'true' ? process.env.CDN_URL : process.env.LOCAL_URL;
 
     const usernameExsists = await userRef.where("username", "==", req.body.username).get();
     const emailExsists = await userRef.where("email", "==", req.body.email).get();
@@ -54,23 +56,18 @@ router.post('/register', postMiddleware.imgUpload ,async (req, res) => {
         
         let filePath : string
         let filename : string
-        let mimetype : string
+        const publicId : string = "userProfile";
         
-        if(!req.file){
-            console.log("No file found");
-            const genFile = await aquarelle(256, 256, 'public/uploads')
+        if(!req.file){ 
+            const genFile = await aquarelle(256, 256, "../fries/src/cloudLocal/userProfile");
             filePath = genFile.filePath
             filename = genFile.fileName
-            mimetype = "image/png"
-            console.log(filePath, filename, mimetype);
-        }else{
-            console.log("File found");
+        }else{ 
             filePath = req.file.path;
             filename = req.file.filename;
-            mimetype = req.file.mimetype;
         }
 
-        var newUserConfirm : NewUser = {
+        const newUserConfirm : NewUser = {
             username : body.username,
             email : body.email,
             password : hashPass,
@@ -80,14 +77,14 @@ router.post('/register', postMiddleware.imgUpload ,async (req, res) => {
             bio : body.bio || "",
             timeCreate : Date.now(),
             id : uuid.v4(),
-            profilePhotoUrl : cdn_url + filename
+            profilePhotoUrl : cdn_url + `/${publicId}/${filename}`
         };
         
-        await imageUpload({filePath, filename, mimetype})
+        await imageUpload({filePath, filename, publicId})
 
         await userRef.doc(newUserConfirm.id).set(newUserConfirm)
         .then(() => {res.status(200).json(newUserConfirm)})
-        .catch(err => {res.send(err)})
+        .catch(err => res.send(err))
     }
 
 })
@@ -106,7 +103,7 @@ router.post('/login', async (req, res) => {
                 res.status(400).json({'error' : "wrong username or password"});
             }
 
-            let tokenData = doc.data();
+            const tokenData = doc.data();
             tokenData.password = undefined;
             const token = jwt.sign(
                 tokenData

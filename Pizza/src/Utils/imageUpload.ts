@@ -1,45 +1,22 @@
-import * as AWS from 'aws-sdk';
-import * as uuid from 'uuid';
-import * as fs from 'fs';
-import * as path from 'path';
-import imgCompress from './imageCompress';
-import { response } from 'express';
-import {promisify} from 'util';
-import { diskStorage } from 'multer';
-const unlinkAsync = promisify(fs.unlink);
+import imgCompress from "./imageCompress";
+import * as cloudinary from "cloudinary";
 
-const imageUpload = async ({filePath, filename, mimetype})  => {
-    AWS.config.update({region : "us-east-2"});
-    var s3 = new AWS.S3({apiVersion : '2006-03-01'}); 
-
-    var fileStream = fs.createReadStream(filePath);
-    var optimizedFilePath = 'public/optimized/' + filename;
-    
-    await imgCompress();
-
-    const optimizedFs = await fs.createReadStream(optimizedFilePath);
-    const imageUploadParams = {
-        Bucket : process.env.BUCKET_NAME,
-        Key : path.basename(filename),
-        Body : optimizedFs,
-        ContentType :  mimetype,
-        ContentDisposition : 'inline'
-    }
-
-    const cdn_url = process.env.CDN_URL;
-    
-    s3.upload(imageUploadParams, async (err, data) => {
-        if(err) {
-            console.log(err);
-        }else{
-            console.log(cdn_url + filename);
-            return 1;
-        }
-    })
-
-    // await unlinkAsync(filePath).catch(err => console.log(err));
-    // await unlinkAsync(optimizedFilePath).catch(err=> console.log(err));
+interface imageUploadParameters{
+    filePath : string,
+    filename : string,
+    publicId : string,
 }
 
-
+async function imageUpload({ filePath , filename, publicId } : imageUploadParameters) : Promise<void> {    
+    const optimizedFilePath = "public/optimized/" + filename;
+    await imgCompress();
+    
+    if(process.env.PRODUCTION === 'true'){
+        await cloudinary.v2.uploader.upload( optimizedFilePath, {
+            resource_type: "image",
+            public_id: `travelouge/${publicId}/${filename.slice(0, -4)}`,
+            }, (error, result) => console.log(error, result)
+        );
+    }
+}
 export default imageUpload;

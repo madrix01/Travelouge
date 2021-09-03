@@ -45,18 +45,11 @@
       "react-app/jest"
     ]
   },
-  "browserslist": {
-    "production": [
+  "browserslist": [
       ">0.2%",
       "not dead",
       "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
+  ],
   "devDependencies": {
     "@types/cookie-parser": "^1.4.2",
     "@types/google.maps": "^3.44.3",

@@ -16,3 +16,35 @@ And details of all the great attractions of the place you are travelling
  - [ ] Feed system is currently being worked on
  - [ ] Major UI changes
  - [X] Map feature is yet to be deployed
+
+## Setting up development environment
+
+### Pre-requisites
+- Redis
+- yarn
+- node
+- make
+### For backend
+- Setup the project and .env
+```
+cd Pizza
+make Pizza
+```
+- Start firestore emulator
+```
+make run-emulators
+```
+- start redis for backend
+- start the backend development
+```
+yarn start
+```
+### For frontend
+- Setup the project and .env
+```
+cd fries
+make fries
+```
+- Start the project
+```
+yarn start

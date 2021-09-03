@@ -1,11 +1,9 @@
 import * as imagemin from 'imagemin';
-// import * as imageminMozjpeg from 'imagemin-mozjpeg';
-// import * as imageminPngquant from 'imagemin-pngquant';
 const imageminMozjpeg = require('imagemin-mozjpeg');
 const imageminPngquant = require('imagemin-pngquant');
 
-const imgCompress = async () => {
-    console.log('here');
+const imgCompress = async () : Promise<void> => {
+
     await imagemin([`public/uploads/*.png`,], {
         destination : 'public/optimized',
         plugins :  [

@@ -7,7 +7,7 @@ import PostCard from '../../Components/PostCard'
 import AppBarStyled from '../../Components/AppBarStyled'
 import {Button} from '@material-ui/core'
 import axios from 'axios';
-import {url} from '../../constant';
+import url from '../../constant';
 
 interface ProfileParams {
     username : string

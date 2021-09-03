@@ -1,2 +1,2 @@
-let url = "http://3.18.205.56/api"
+let url = "http://localhost:6969/api"
 export default url

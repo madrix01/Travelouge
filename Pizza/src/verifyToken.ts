@@ -1,8 +1,9 @@
 import * as jwt from 'jsonwebtoken'   
+import {Request, Response, NextFunction} from 'express';
 
-export default (req, res, next) => {
+export default (req : Request, res : Response, next : NextFunction) : void => {
     const token : string = req.header('authToken')
-    if(!token) return res.status(400).json({"error" : "Access Denied"});
+    if(!token) res.status(400).json({"error" : "Access Denied"});
 
     try{
         const verified = jwt.verify(token, process.env.TOKEN_SECRET);

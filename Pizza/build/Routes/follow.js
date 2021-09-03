@@ -21,7 +21,7 @@ router.get("/follow/:followId", verifyToken_1.default, async (req, res) => {
         return temp;
     });
     if (yd.length != 0) {
-        for (let doc of yd) {
+        for (const doc of yd) {
             if (doc.fdesti === req.params.followId) {
                 console.log("Already following");
                 return res.status(400).json({ "error": "already followed" });
@@ -47,13 +47,13 @@ router.get("/follow/:followId", verifyToken_1.default, async (req, res) => {
     await userRef.doc(req.user.id).get()
         .then(doc => {
         if (doc.exists) {
-            redisConnect_1.SET_ASYNC(`profile ${doc.data().username}`, JSON.stringify(doc.data()), "EX", 3600);
+            (0, redisConnect_1.SET_ASYNC)(`profile ${doc.data().username}`, JSON.stringify(doc.data()), "EX", 3600);
         }
     });
     await userRef.doc(req.params.followId).get()
         .then(doc => {
         if (doc.exists) {
-            redisConnect_1.SET_ASYNC(`profile ${doc.data().username}`, JSON.stringify(doc.data()), "EX", 3600);
+            (0, redisConnect_1.SET_ASYNC)(`profile ${doc.data().username}`, JSON.stringify(doc.data()), "EX", 3600);
         }
     });
     return res.send(followRelation);

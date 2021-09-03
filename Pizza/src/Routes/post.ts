@@ -3,7 +3,6 @@ import verify from '@src/verifyToken';
 import db from '@src/initFirebase';
 import * as uuid from 'uuid';
 import * as multer from 'multer';
-import * as AWS from 'aws-sdk';
 import * as fs from 'fs';
 import {Post} from '@models/post.model';
 import {promisify} from 'util';
@@ -19,7 +18,7 @@ const router = express.Router();
 const postRef = db.collection('posts')
 const userRef = db.collection('users');
 
-var storage = multer.diskStorage({
+const storage = multer.diskStorage({
     destination : "./public/uploads",
     filename : (req, file, cb) => {
         cb(null, uuid.v4() + '.' + file.originalname.split('.').pop());
@@ -38,13 +37,9 @@ router.get('/', async (req, res) =>{
 
 
 router.post('/', [postMiddleware.userVerify ,postMiddleware.imageUpload] ,async (req, res) => {
-    AWS.config.update({region : "us-east-2"});
-    var s3 = new AWS.S3({apiVersion : '2006-03-01'});
-
-
-    var filePath = req.file.path;
-    var filename = req.file.filename;
-    var mimetype = req.file.mimetype;
+    const filePath = req.file.path;
+    const filename = req.file.filename;
+    const publicId = "posts";
 
 
     const body = req.body;
@@ -64,7 +59,7 @@ router.post('/', [postMiddleware.userVerify ,postMiddleware.imageUpload] ,async 
         likesCount : 0,
         postUrl : strUrl(body.title)
     }
-    await imageUpload({filePath, filename, mimetype})
+    await imageUpload({filePath, filename, publicId})
         .catch(err => console.log(err));
 
     // Clear cache
@@ -114,7 +109,7 @@ router.get('/:username',verify , async (req, res) => {
         res.json({"error" : "no posts yet"})
         return;
     }
-    var mfeed = [];
+    const mfeed = [];
     snapShot.forEach(doc => {
         const dc = doc.data();
         mfeed.push(dc);

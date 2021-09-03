@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.get('/u/:username',verify ,async (req, res) => {
     if(req.user.username === req.params.username){
-        var userProfile = req.user; 
+        const userProfile = req.user; 
         return res.json(userProfile);
     }else{
         const cached_data = await GET_ASYNC(`profile ${req.params.username}`);
@@ -23,7 +23,7 @@ router.get('/u/:username',verify ,async (req, res) => {
             return;
         }
         snapShot.forEach(async doc =>  {
-            var userProfile = doc.data();
+            const userProfile = doc.data();
             userProfile.password = undefined;
             await SET_ASYNC(`profile ${req.params.username}`, JSON.stringify(userProfile), 'EX', 3600)
             res.json(userProfile)

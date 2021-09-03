@@ -4,7 +4,7 @@ import './login.css'
 import { Redirect } from "react-router";
 import {Button} from '@material-ui/core';
 import AppBarStyled from '../../Components/AppBarStyled'
-import {url} from '../../constant';
+import url from '../../constant';
 
 interface LoginState {
   username : string,

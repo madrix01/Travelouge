@@ -2,3 +2,6 @@ node_modules
 .env
 database_secret.json
 public
+.firebaserc
+firestore-debug.log
+ui-debug.log

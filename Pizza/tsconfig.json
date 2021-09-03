@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"target": "esnext",
-		"watch": false,
+		"watch": true,
 		"allowSyntheticDefaultImports": true,
 		"outDir": "./build",
 		"moduleResolution": "node",
@@ -17,7 +17,8 @@
 			"@utils/*" : ["./src/Utils/*"],
 			"@test/*" : ["./src/Test/*"],
 			"@src/*" : ["./src/*"]
-		}	
+		},
+		"resolveJsonModule": true	
 	},
     "include": ["./src"],
 }

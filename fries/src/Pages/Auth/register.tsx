@@ -3,7 +3,8 @@ import { Button } from "@material-ui/core";
 import { NewUser } from "../../Models/profile.model";
 import './register.css'
 import AppBarStyled from "../../Components/AppBarStyled"
-import {url} from '../../constant';
+import url from '../../constant';
+
 
 class Register extends React.Component<{}, NewUser> {
   constructor(props: any) {

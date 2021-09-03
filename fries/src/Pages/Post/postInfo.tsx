@@ -2,7 +2,7 @@ import React from "react";
 import AppBarStyled from "../../Components/AppBarStyled";
 import './postInfo.css'
 import {PostModel} from '../../Models/post.model'
-import {url} from "../../constant"
+import url from "../../constant"
 import { RouteComponentProps, RouteProps } from "react-router";
 import Cookie from 'js-cookie';
 import {MapStable} from '../../Components/Map'

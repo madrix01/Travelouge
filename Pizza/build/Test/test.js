@@ -22,4 +22,7 @@ router.get("/up", async (req, res) => {
     const x = await aquarelle(128, 128, 'public/uploads').then(console.log("Uploaded"));
     res.send(`${x.filePath} ${x.fileName}`);
 });
+router.get("/", async (req, res) => {
+    res.send("mike testing");
+});
 exports.default = router;

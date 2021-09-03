@@ -5,7 +5,7 @@ import './post.css'
 import Cookies from 'js-cookie'
 import AppBarStyled from '../../Components/AppBarStyled'
 import {MapC} from '../../Components/Map'
-import {url} from '../../constant';
+import url from '../../constant';
 
 class NewPost extends React.Component<{} , PostModel> {
     constructor(props : any){

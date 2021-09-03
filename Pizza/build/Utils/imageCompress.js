@@ -1,12 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const imagemin = require("imagemin");
-// import * as imageminMozjpeg from 'imagemin-mozjpeg';
-// import * as imageminPngquant from 'imagemin-pngquant';
 const imageminMozjpeg = require('imagemin-mozjpeg');
 const imageminPngquant = require('imagemin-pngquant');
 const imgCompress = async () => {
-    console.log('here');
     await imagemin([`public/uploads/*.png`,], {
         destination: 'public/optimized',
         plugins: [

@@ -4,7 +4,7 @@ import { Redirect, useHistory} from 'react-router-dom';
 import AppBarStyled from '../../Components/AppBarStyled'
 import ReactMarkdown from 'react-markdown';
 import './home.css'
-import {url} from '../../constant';
+import url from '../../constant';
 import {ProfileModel} from '../../Models/profile.model' 
 import ProfileCard from '../../Components/profileCard'
 

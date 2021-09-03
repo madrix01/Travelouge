@@ -6,7 +6,7 @@ import db from '../initFirebase';
 import {Follow} from '@models/follow.model';
 import * as uuid from 'uuid';
 import { firestore } from 'firebase-admin';
-import {GET_ASYNC, SET_ASYNC} from '@src/redisConnect';
+import {SET_ASYNC} from '@src/redisConnect';
 
 
 const userRef = db.collection('users');
@@ -26,7 +26,7 @@ router.get("/follow/:followId", verify, async (req, res) => {
         return temp; 
     })
     if(yd.length != 0){
-        for(let doc of yd){
+        for(const doc of yd){
             if(doc.fdesti === req.params.followId){
                 console.log("Already following");
                 return res.status(400).json({"error" : "already followed"})
