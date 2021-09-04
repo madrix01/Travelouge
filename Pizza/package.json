@@ -6,7 +6,9 @@
   "scripts": {
     "start": "ts-node src/index.ts",
     "lint": "eslint . --ext .ts",
-    "storage": "firebase emulators:start"
+    "dev:ts": "nodemon --watch './**/*.ts' --exec 'ts-node' src/index.ts",
+    "dev:js": "nodemon build/index.js",
+    "try": "node build/index.js"
   },
   "_moduleAliases": {
     "@models": "build/Models",
@@ -33,6 +35,8 @@
     "jsonwebtoken": "^8.5.1",
     "module-alias": "^2.2.2",
     "multer": "^1.4.2",
+    "pg": "^8.7.1",
+    "prisma": "^2.30.3",
     "redis": "^3.0.2",
     "typescript": "^4.2.3",
     "uuid": "^8.3.2"
@@ -50,6 +54,7 @@
     "@typescript-eslint/eslint-plugin": "^4.30.0",
     "@typescript-eslint/parser": "^4.30.0",
     "eslint": "^7.32.0",
+    "nodemon": "^2.0.12",
     "ts-node": "^9.1.1"
   }
 }

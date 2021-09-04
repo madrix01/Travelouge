@@ -1,11 +1,9 @@
 import * as redis from 'redis';
 import {promisify} from 'util';
 
-const client = process.env.PRODUCTION === 'true' ? redis.createClient({
-    host: process.env.REDIS_HOST,
-    password : process.env.REDIS_PASSWORD,
-    port : parseInt(process.env.PORT),
-}) : redis.createClient();
+const client = redis.createClient({
+    host: "redis",
+})
 
 console.log((process.env.PRODUCTION === 'true' ? "Redis connected [Production]" : "Redis connected [http://localhost:6379]"));
 

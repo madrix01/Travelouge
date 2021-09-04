@@ -3,11 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DEL_ASYNC = exports.SET_ASYNC = exports.GET_ASYNC = void 0;
 const redis = require("redis");
 const util_1 = require("util");
-const client = process.env.PRODUCTION === 'true' ? redis.createClient({
-    host: process.env.REDIS_HOST,
-    password: process.env.REDIS_PASSWORD,
-    port: parseInt(process.env.PORT),
-}) : redis.createClient();
+const client = redis.createClient({
+    host: "redis",
+});
 console.log((process.env.PRODUCTION === 'true' ? "Redis connected [Production]" : "Redis connected [http://localhost:6379]"));
 const GET_ASYNC = (0, util_1.promisify)(client.get).bind(client);
 exports.GET_ASYNC = GET_ASYNC;
