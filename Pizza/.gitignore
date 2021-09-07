@@ -1,8 +1,6 @@
 node_modules
+# Keep environment variables out of version control
 .env
-database_secret.json
-public
-.firebaserc
-firestore-debug.log
-ui-debug.log
-firebase-debug.log
+public/*/**
+prisma/migrations
+yarn-error.log

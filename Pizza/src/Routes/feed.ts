@@ -1,16 +1,13 @@
-import * as express from 'express';
-import db from '@src/initFirebase'
-import {GET_ASYNC, SET_ASYNC} from '@src/redisConnect';
-import verify from '@src/verifyToken';
+import * as express from "express";
+import prisma from "@src/initUtil";
+import { GET_ASYNC, SET_ASYNC } from "@src/redisConnect";
+import verify from "@src/verifyToken";
 
-
-const postRef = db.collection("posts");
 const router = express.Router();
 
-
-router.get('/', async (req, res) => {
-    res.json({page : "feed"})
-})
+router.get("/", async (req, res) => {
+    res.json({ page: "feed" });
+});
 
 // My feed
 
