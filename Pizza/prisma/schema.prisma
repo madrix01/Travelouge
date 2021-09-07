@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String @unique
+  username        String
+  followers       Int    @default(0)
+  followings       Int    @default(0)
+  placesVisited   Int    @default(0)
+  bio             String
+  timeCreate      BigInt 
+  profilePhotoUrl String
+  email           String
+  password        String
+}
+
+model FollowRelations {
+  relationId String @unique
+  fsource String
+  fdesti String
+  time BigInt
+  isActive Boolean
+}
+
+model test {
+  id String @unique
+  username String
+}
+
+model Post {
+  postId String @unique
+  timeCreate BigInt
+  userId String
+  title String
+  description String
+  imageURL String
+  latitude Float 
+  longitude Float
+  commentCount Int
+  likesCount Int
+  postUrl String
+}

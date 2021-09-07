@@ -1,3 +1,5 @@
 .yarnrc.yml
 .yarn
 scripts
+yarn-error.log
+data/

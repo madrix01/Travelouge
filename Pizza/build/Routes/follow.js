@@ -3,77 +3,149 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const verifyToken_1 = require("../verifyToken");
 const router = express.Router();
-const initFirebase_1 = require("../initFirebase");
+const initUtil_1 = require("../initUtil");
 const uuid = require("uuid");
-const firebase_admin_1 = require("firebase-admin");
 const redisConnect_1 = require("@src/redisConnect");
-const userRef = initFirebase_1.default.collection('users');
-const followRef = initFirebase_1.default.collection('followRelations');
 router.get("/follow/:followId", verifyToken_1.default, async (req, res) => {
     if (req.user.id === req.params.followId) {
-        res.json({ error: "cannot follow logged in user" });
+        return res.json({ error: "cannot follow logged in user" });
     }
-    const yd = await followRef.where('fsource', '==', req.user.id).get().then((ss) => {
-        const temp = [];
-        ss.forEach((doc) => {
-            temp.push(doc.data());
+    // Check if user is present
+    let destiUser = await initUtil_1.default.user.findFirst({
+        where: {
+            id: req.params.followId,
+        },
+    });
+    if (!destiUser) {
+        return res.status(404).json({ error: "destination user not found" });
+    }
+    const yd = await initUtil_1.default.followRelations.findFirst({
+        where: {
+            fsource: {
+                equals: req.user.id,
+            },
+            fdesti: {
+                equals: req.params.followId,
+            },
+        },
+    });
+    if (yd) {
+        if (yd.isActive) {
+            return res.status(400).json({ error: "already followed" });
+        }
+        else {
+            await initUtil_1.default.followRelations.update({
+                where: {
+                    relationId: yd.relationId,
+                },
+                data: {
+                    isActive: true,
+                },
+            });
+        }
+    }
+    else {
+        const followRelation = {
+            fdesti: req.params.followId,
+            fsource: req.user.id,
+            relationId: uuid.v4(),
+            time: Date.now(),
+            isActive: true,
+        };
+        await initUtil_1.default.followRelations.create({
+            data: followRelation,
         });
-        return temp;
-    });
-    if (yd.length != 0) {
-        for (const doc of yd) {
-            if (doc.fdesti === req.params.followId) {
-                console.log("Already following");
-                return res.status(400).json({ "error": "already followed" });
-            }
-        }
     }
-    const followRelation = {
-        fdesti: req.params.followId,
-        fsource: req.user.id,
-        relationId: uuid.v4(),
-        time: Date.now(),
-    };
-    await followRef.doc(followRelation.relationId).set(followRelation)
-        .catch(err => { res.send(err); });
-    // increase following
-    await userRef.doc(req.user.id).update({
-        followings: firebase_admin_1.firestore.FieldValue.increment(1)
+    // increase following count
+    let sourceUser = await initUtil_1.default.user.update({
+        where: {
+            id: req.user.id,
+        },
+        data: {
+            followings: {
+                increment: 1,
+            },
+        },
     });
-    await userRef.doc(req.params.followId).update({
-        followers: firebase_admin_1.firestore.FieldValue.increment(1)
+    // increase follower count
+    destiUser = await initUtil_1.default.user.update({
+        where: {
+            id: req.params.followId,
+        },
+        data: {
+            followers: {
+                increment: 1,
+            },
+        },
     });
-    // Updating cache 
-    await userRef.doc(req.user.id).get()
-        .then(doc => {
-        if (doc.exists) {
-            (0, redisConnect_1.SET_ASYNC)(`profile ${doc.data().username}`, JSON.stringify(doc.data()), "EX", 3600);
-        }
-    });
-    await userRef.doc(req.params.followId).get()
-        .then(doc => {
-        if (doc.exists) {
-            (0, redisConnect_1.SET_ASYNC)(`profile ${doc.data().username}`, JSON.stringify(doc.data()), "EX", 3600);
-        }
-    });
-    return res.send(followRelation);
+    // Updating cache
+    // Updating source user
+    await (0, redisConnect_1.SET_ASYNC)(`profile ${sourceUser.username}`, JSON.stringify(sourceUser), "EX", 3600);
+    // Updating destination user
+    await (0, redisConnect_1.SET_ASYNC)(`profile ${destiUser.username}`, JSON.stringify(destiUser), "EX", 3600);
+    return res.status(200).json({ success: "follow relation created" });
 });
-router.get("/unfollow/:relationId", verifyToken_1.default, async (req, res) => {
+router.get("/unfollow/:followId", verifyToken_1.default, async (req, res) => {
     if (req.user.id === req.params.followId) {
-        res.json({ error: "cannot follow logged in user" });
+        return res.json({ error: "cannot unfollow logged in user" });
     }
-    const relationRef = await followRef.doc(req.params.relationId);
-    const fr = await relationRef.get();
-    if (fr.exists) {
-        console.log("Relation Doc", fr.data());
+    const followRelation = await initUtil_1.default.followRelations.findFirst({
+        where: {
+            AND: [
+                {
+                    fsource: {
+                        equals: req.user.id,
+                    },
+                },
+                {
+                    fdesti: {
+                        equals: req.params.followId,
+                    },
+                },
+            ],
+        },
+    });
+    if (!followRelation) {
+        return res.status(404).json({ error: "relation not found" });
     }
-    await followRef.doc(req.params.relationId).delete();
-    await userRef.doc(req.user.id).update({
-        followings: firebase_admin_1.firestore.FieldValue.increment(-1)
+    if (!followRelation.isActive) {
+        return res.status(400).json({ error: "relation is not active" });
+    }
+    await initUtil_1.default.followRelations.update({
+        where: {
+            relationId: followRelation.relationId,
+        },
+        data: {
+            isActive: false,
+        },
     });
-    await userRef.doc(fr.data().following).update({
-        followers: firebase_admin_1.firestore.FieldValue.increment(-1)
+    // decrease following count
+    const sourceUser = await initUtil_1.default.user.update({
+        where: {
+            id: req.user.id,
+        },
+        data: {
+            followings: {
+                decrement: 1,
+            },
+        },
     });
-    res.json({ "deleted": "yes" });
+    // decrease follower count
+    const destiUser = await initUtil_1.default.user.update({
+        where: {
+            id: req.params.followId,
+        },
+        data: {
+            followers: {
+                decrement: 1,
+            },
+        },
+    });
+    // Updating cache
+    // Updating source user
+    await (0, redisConnect_1.SET_ASYNC)(`profile ${sourceUser.username}`, JSON.stringify(sourceUser), "EX", 3600);
+    // Updating destination user
+    await (0, redisConnect_1.SET_ASYNC)(`profile ${destiUser.username}`, JSON.stringify(destiUser), "EX", 3600);
+    res.json({ deactivated: "yes" });
 });
 exports.default = router;

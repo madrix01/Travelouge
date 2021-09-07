@@ -1,0 +1,37 @@
+version: "3"
+
+services:
+  db:
+    logging:
+      driver: none
+    image: postgres
+    env_file:
+      - database.env
+    volumes:
+      - ./data/postgres:/var/lib/postgressql/data/
+    ports:
+      - 5432:5432
+  redis:
+    logging:
+      driver: none
+    image: redis:6.2.5-alpine
+    ports:
+      - 6379:6379
+  pizza:
+    volumes:
+      - ./Pizza:/app:cached
+    environment:
+      PORT: 6969
+      PRODUCTION: "false"
+      REDIS_HOST: "localhost"
+      REDIS_PORT: "6379"
+      TOKEN_SECRET: "c1s9K2AmfDM6LlEnfSllN3N9T1Q3YjYi"
+      LOCAL_URL: "src/cloudLocal/"
+      DATABASE_URL: "postgresql://shlok:shlok@db/travelouge"
+    build: ./Pizza
+    ports:
+      - 6969:6969
+    depends_on:
+      - "redis"
+      - "db"
+    command: "yarn run dev:ts"

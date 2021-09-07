@@ -6,36 +6,52 @@ const jwt = require("jsonwebtoken");
 const uuid = require("uuid");
 const multer = require("multer");
 const aquarelle = require("aquarelle");
-const initFirebase_1 = require("../initFirebase");
+const initUtil_1 = require("../initUtil");
 const imageUpload_1 = require("@utils/imageUpload");
 const router = express.Router();
-const userRef = initFirebase_1.default.collection('users');
 const storage = multer.diskStorage({
-    destination: (process.env.PRODUCTION === "true" ? "./public/uploads" : "../fries/src/cloudLocal/userProfile"),
+    destination: process.env.PRODUCTION === "true"
+        ? "./public/uploads"
+        : "../fries/src/cloudLocal/userProfile",
     filename: (req, file, cb) => {
-        cb(null, uuid.v4() + '.' + file.originalname.split('.').pop());
-    }
+        cb(null, uuid.v4() + "." + file.originalname.split(".").pop());
+    },
 });
 const postMiddleware = {
     imgUpload: multer({ storage: storage }).single("profilePhoto"),
 };
-router.get('/register', async (req, res) => {
+router.get("/register", async (req, res) => {
     res.json({ page: "register" });
 });
-router.post('/register', postMiddleware.imgUpload, async (req, res) => {
-    const dpUploadPath = process.env.PRODUCTION === "true" ? "public/uploads" : "/fries/src/cloudLocal/userProfile";
+router.post("/register", postMiddleware.imgUpload, async (req, res) => {
+    const dpUploadPath = process.env.PRODUCTION === "true"
+        ? "public/uploads"
+        : "/fries/src/cloudLocal/userProfile";
     if (!req.file) {
         console.info("No image found");
     }
     const body = req.body;
-    const cdn_url = process.env.PRODUCTION === 'true' ? process.env.CDN_URL : process.env.LOCAL_URL;
-    const usernameExsists = await userRef.where("username", "==", req.body.username).get();
-    const emailExsists = await userRef.where("email", "==", req.body.email).get();
-    if (!usernameExsists.empty || !emailExsists.empty) {
+    const cdn_url = process.env.PRODUCTION === "true"
+        ? process.env.CDN_URL
+        : process.env.LOCAL_URL;
+    const usernameExsists = await initUtil_1.default.user.findMany({
+        where: {
+            username: {
+                equals: req.body.username,
+            },
+        },
+    });
+    const emailExsists = await initUtil_1.default.user.findMany({
+        where: {
+            email: {
+                equals: req.body.email,
+            },
+        },
+    });
+    if (usernameExsists.length > 0 || emailExsists.length > 0) {
         res.status(400).json({ error: "Email or username exsists" });
     }
     else {
-        console.log(req.body.password);
         const password = await req.body.password;
         const salt = await bycrypt.genSalt(10);
         const hashPass = await bycrypt.hash(password, salt);
@@ -61,34 +77,63 @@ router.post('/register', postMiddleware.imgUpload, async (req, res) => {
             bio: body.bio || "",
             timeCreate: Date.now(),
             id: uuid.v4(),
-            profilePhotoUrl: cdn_url + `/${publicId}/${filename}`
+            profilePhotoUrl: cdn_url + `/${publicId}/${filename}`,
         };
         await (0, imageUpload_1.default)({ filePath, filename, publicId });
-        await userRef.doc(newUserConfirm.id).set(newUserConfirm)
-            .then(() => { res.status(200).json(newUserConfirm); })
-            .catch(err => res.send(err));
+        const newUser = await initUtil_1.default.user
+            .create({
+            data: newUserConfirm,
+        })
+            .then(() => {
+            return res
+                .status(200)
+                .json({
+                username: newUserConfirm.username,
+                email: newUserConfirm.email,
+            });
+        })
+            .catch((err) => console.log(err));
     }
 });
-router.post('/login', async (req, res) => {
+router.post("/login", async (req, res) => {
+    if (!req.body) {
+        return res.json({ error: "not adequate parameters" });
+    }
     const body = req.body;
-    const userExsist = await userRef.where("username", "==", body.username).get();
-    if (userExsist.empty) {
-        res.status(400).json({ 'error': "wrong username or password" });
+    // const userExsist = await userRef.where("username", "==", body.username).get();
+    const userExsist = await initUtil_1.default.user.findFirst({
+        where: {
+            username: {
+                equals: body.username,
+            },
+        },
+    });
+    if (!userExsist) {
+        res.status(400).json({ error: "wrong username or password" });
     }
     else {
-        userExsist.forEach(async (doc) => {
-            const validPass = await bycrypt.compare(body.password, doc.data().password);
-            if (!validPass) {
-                res.json({ 'error': "wrong username or password" });
-                return;
-            }
-            const tokenData = doc.data();
-            tokenData.password = undefined;
-            const token = jwt.sign(tokenData, process.env.TOKEN_SECRET, { expiresIn: '1d' });
-            res.cookie('authToken', token, { httpOnly: true });
-            res.status(200).json({ authToken: token });
+        const validPass = await bycrypt.compare(body.password, userExsist.password);
+        if (!validPass) {
+            res.json({ error: "wrong username or password" });
             return;
+        }
+        const tokenData = userExsist;
+        tokenData.password = undefined;
+        const token = jwt.sign(tokenData, process.env.TOKEN_SECRET, {
+            expiresIn: "1d",
         });
+        res.cookie("authToken", token, { httpOnly: true });
+        res.status(200).json({ authToken: token });
+        return;
     }
+});
+router.get("/authtest", async (req, res) => {
+    await initUtil_1.default.test.create({
+        data: {
+            id: "234",
+            username: "madrix01",
+        },
+    });
+    res.send("Working");
 });
 exports.default = router;
